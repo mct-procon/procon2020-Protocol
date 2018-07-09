@@ -22,16 +22,24 @@ namespace MCTProcon29Protocol
 
         Queue<byte[]> writeQueue = new Queue<byte[]>();
 
+
+        int _port = 0;
         bool isClient;
         bool isStopRequired = false;
 
         public event Action<Exception> OnExceptionThrown;
 
-        public void StartServer(int port)
+        public void Start(int port)
         {
             var ipAddress = Dns.GetHostEntry("localhost").AddressList[0];
-            listener = new TcpListener(ipAddress, port);
-            listener.Start();
+
+            if (isClient)
+                _port = port;
+            else
+            {
+                listener = new TcpListener(ipAddress, port);
+                listener.Start();
+            }
             IPCThread = new Thread(ServerMainAction);
         }
 
@@ -51,7 +59,7 @@ namespace MCTProcon29Protocol
 
         public void ServerMainAction()
         {
-            client = listener.AcceptTcpClient();
+            client =  isClient ? new TcpClient("localhost", _port) : listener.AcceptTcpClient();
             stream = client.GetStream();
             stream.ReadTimeout = 800;
 
@@ -167,7 +175,7 @@ namespace MCTProcon29Protocol
         {
             stream.Close();
             client.Close();
-            listener.Stop();
+            listener?.Stop();
         }
     }
 }
