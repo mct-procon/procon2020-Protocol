@@ -41,6 +41,7 @@ namespace MCTProcon29Protocol
                 listener.Start();
             }
             IPCThread = new Thread(ServerMainAction);
+            IPCThread.Start();
         }
 
         public IPCManager(IIPCClientReader client)
@@ -173,6 +174,8 @@ namespace MCTProcon29Protocol
 
         public void ShutdownServer()
         {
+            isStopRequired = true;
+            Thread.Sleep(800);
             stream.Close();
             client.Close();
             listener?.Stop();
