@@ -25,5 +25,11 @@ namespace MCTProcon29Protocol.Methods
 
         [Key(5)]
         public Point EnemyAgent2 { get; set; }
+
+        [Key(6)]
+        public ushort[] MeColoredBoard { get; set; }
+
+        [Key(7)]
+        public ushort[] EnemyColoredBoard { get; set; }
     }
 }
