@@ -21,12 +21,18 @@ namespace MCTProcon29Protocol.Methods
         public sbyte[,] Board { get; set; }
 
         [Key(4)]
-        public Point InitialPositionAgent1 { get; set; }
+        public Point MeAgent1 { get; set; }
 
         [Key(5)]
-        public Point InitialPositionAgent2 { get; set; }
+        public Point MeAgent2 { get; set; }
 
         [Key(6)]
+        public Point EnemyAgent1 { get; set; }
+
+        [Key(7)]
+        public Point EnemyAgent2 { get; set; }
+
+        [Key(8)]
         public byte Turns { get; set; }
     }
 }
