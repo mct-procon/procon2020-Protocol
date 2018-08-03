@@ -41,6 +41,7 @@ namespace MCTProcon29Protocol
                 listener.Start();
             }
             IPCThread = new Thread(ServerMainAction);
+            IPCThread.Start();
         }
 
         public IPCManager(IIPCClientReader client)
