@@ -24,10 +24,10 @@ namespace MCTProcon29Protocol.Methods
         public sbyte[,] Board { get; set; }
 
         [Key(5)]
-        public ushort[] MeColoredMap { get; set; }
+        public ColoredBoardSmallBigger MeColoredBoard { get; set; }
 
         [Key(6)]
-        public ushort[] EnemyColoredMap { get; set; }
+        public ColoredBoardSmallBigger EnemyColoredBoard { get; set; }
 
         [Key(7)]
         public int LimitationTime { get; set; }
