@@ -15,6 +15,12 @@ namespace MCTProcon29Protocol.Methods
 
         [Key(1)]
         public int ProcessId { get; set; }
+
+        public Connect(ProgramKind kind)
+        {
+            Kind = (byte)kind;
+            ProcessId = System.Diagnostics.Process.GetCurrentProcess().Id;
+        }
     }
 
 

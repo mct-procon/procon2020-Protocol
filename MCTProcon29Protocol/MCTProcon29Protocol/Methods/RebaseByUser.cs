@@ -12,5 +12,11 @@ namespace MCTProcon29Protocol.Methods
         public Point Agent1 { get; set; }
         [Key(1)]
         public Point Agent2 { get; set; }
+
+        public RebaseByUser(Point agent1, Point agent2)
+        {
+            Agent1 = agent1;
+            Agent2 = agent2;
+        }
     }
 }

@@ -14,5 +14,11 @@ namespace MCTProcon29Protocol.Methods
         [Key(1)]
         public Point MeAgent2 { get; set; }
 
+
+        public Decided(Point agent1, Point agent2)
+        {
+            MeAgent1 = agent1;
+            MeAgent2 = agent2;
+        }
     }
 }

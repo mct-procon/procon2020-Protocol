@@ -13,5 +13,11 @@ namespace MCTProcon29Protocol.Methods
 
         [Key(1)]
         public int EnemyScore { get; set; }
+
+        public GameEnd(int score, int enemyScore)
+        {
+            MeScore = score;
+            EnemyScore = enemyScore;
+        }
     }
 }

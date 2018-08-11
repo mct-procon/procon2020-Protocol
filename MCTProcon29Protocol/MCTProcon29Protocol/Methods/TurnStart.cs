@@ -31,5 +31,17 @@ namespace MCTProcon29Protocol.Methods
 
         [Key(7)]
         public ColoredBoardSmallBigger EnemyColoredBoard { get; set; }
+
+        public TurnStart(byte turn, int waitMiliSecs, Point meAgent1, Point meAgent2, Point enemyAgent1, Point enemyAgent2, in ColoredBoardSmallBigger meColoredBoard, in ColoredBoardSmallBigger enemyColoredBoard)
+        {
+            Turn = turn;
+            WaitMiliSeconds = waitMiliSecs;
+            MeAgent1 = meAgent1;
+            MeAgent2 = meAgent2;
+            EnemyAgent1 = enemyAgent1;
+            EnemyAgent2 = enemyAgent2;
+            MeColoredBoard = meColoredBoard;
+            EnemyColoredBoard = enemyColoredBoard;
+        }
     }
 }

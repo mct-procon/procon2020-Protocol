@@ -10,5 +10,10 @@ namespace MCTProcon29Protocol.Methods
     {
         [Key(0)]
         public bool IsEnter { get; set; }
+
+        public Pause(bool isEnter)
+        {
+            IsEnter = isEnter;
+        }
     }
 }

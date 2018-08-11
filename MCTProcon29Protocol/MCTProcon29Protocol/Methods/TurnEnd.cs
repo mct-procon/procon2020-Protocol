@@ -10,5 +10,10 @@ namespace MCTProcon29Protocol.Methods
     {
         [Key(0)]
         public byte Turn { get; set; }
+
+        public TurnEnd(byte turn)
+        {
+            Turn = turn;
+        }
     }
 }

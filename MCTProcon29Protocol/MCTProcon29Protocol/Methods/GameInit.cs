@@ -9,30 +9,39 @@ namespace MCTProcon29Protocol.Methods
     public class GameInit
     {
         [Key(0)]
-        public byte TeamId { get; set; }
-
-        [Key(1)]
         public byte BoardHeight { get; set; }
 
-        [Key(2)]
+        [Key(1)]
         public byte BoardWidth { get; set; }
 
-        [Key(3)]
+        [Key(2)]
         public sbyte[,] Board { get; set; }
 
-        [Key(4)]
+        [Key(3)]
         public Point MeAgent1 { get; set; }
 
-        [Key(5)]
+        [Key(4)]
         public Point MeAgent2 { get; set; }
 
-        [Key(6)]
+        [Key(5)]
         public Point EnemyAgent1 { get; set; }
 
-        [Key(7)]
+        [Key(6)]
         public Point EnemyAgent2 { get; set; }
 
-        [Key(8)]
+        [Key(7)]
         public byte Turns { get; set; }
+
+        public GameInit(byte height, byte width, sbyte[,] board, Point meAgent1, Point meAgent2, Point enemyAgent1, Point enemyAgent2, byte turns)
+        {
+            BoardHeight = height;
+            BoardWidth = width;
+            Board = board;
+            MeAgent1 = meAgent1;
+            MeAgent2 = meAgent2;
+            EnemyAgent1 = enemyAgent1;
+            EnemyAgent2 = enemyAgent2;
+            Turns = turns;
+        }
     }
 }

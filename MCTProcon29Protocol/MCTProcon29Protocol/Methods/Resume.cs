@@ -31,5 +31,16 @@ namespace MCTProcon29Protocol.Methods
 
         [Key(7)]
         public int LimitationTime { get; set; }
+
+        public Resume(byte turn, byte currentTurn, int boardHeight, int boardWidth, sbyte[,] board, ColoredBoardSmallBigger meColoredBoard, ColoredBoardSmallBigger enemyColoredBoard)
+        {
+            Turns = turn;
+            CurrentTurn = currentTurn;
+            BoardHeight = boardHeight;
+            BoardWidth = boardWidth;
+            Board = board;
+            MeColoredBoard = meColoredBoard;
+            EnemyColoredBoard = enemyColoredBoard;
+        }
     }
 }
