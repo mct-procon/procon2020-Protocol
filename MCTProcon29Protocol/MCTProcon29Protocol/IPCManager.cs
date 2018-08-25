@@ -65,7 +65,7 @@ namespace MCTProcon29Protocol
                 client = isClient ? new TcpClient("localhost", _port) : listener.AcceptTcpClient();
             }catch(SocketException ex)
             {
-                if (ex.ErrorCode != 10041)
+                if (ex.ErrorCode != 10004)
                     System.Diagnostics.Debugger.Break();
             }
             stream = client.GetStream();
