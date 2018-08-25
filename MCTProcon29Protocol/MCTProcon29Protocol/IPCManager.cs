@@ -67,6 +67,7 @@ namespace MCTProcon29Protocol
             {
                 if (ex.ErrorCode != 10004)
                     System.Diagnostics.Debugger.Break();
+                return;
             }
             stream = client.GetStream();
             stream.ReadTimeout = 800;
