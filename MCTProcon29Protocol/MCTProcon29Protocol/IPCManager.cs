@@ -60,7 +60,14 @@ namespace MCTProcon29Protocol
 
         public void ServerMainAction()
         {
-            client =  isClient ? new TcpClient("localhost", _port) : listener.AcceptTcpClient();
+            try
+            {
+                client = isClient ? new TcpClient("localhost", _port) : listener.AcceptTcpClient();
+            }catch(SocketException ex)
+            {
+                if (ex.ErrorCode != 10041)
+                    System.Diagnostics.Debugger.Break();
+            }
             stream = client.GetStream();
             stream.ReadTimeout = 800;
 
@@ -176,8 +183,8 @@ namespace MCTProcon29Protocol
         {
             isStopRequired = true;
             Thread.Sleep(800);
-            stream.Close();
-            client.Close();
+            stream?.Close();
+            client?.Close();
             listener?.Stop();
         }
     }
