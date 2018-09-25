@@ -42,5 +42,8 @@ namespace MCTProcon29Protocol.Methods
             MeColoredBoard = meColoredBoard;
             EnemyColoredBoard = enemyColoredBoard;
         }
+
+        // DO NOT ERASE
+        public Resume() { }
     }
 }

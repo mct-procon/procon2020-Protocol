@@ -19,5 +19,8 @@ namespace MCTProcon29Protocol.Methods
             MeScore = score;
             EnemyScore = enemyScore;
         }
+
+        // DO NOT ERASE
+        public GameEnd() { }
     }
 }

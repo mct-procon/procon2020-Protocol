@@ -43,5 +43,8 @@ namespace MCTProcon29Protocol.Methods
             EnemyAgent2 = enemyAgent2;
             Turns = turns;
         }
+
+        // DO NOT ERASE
+        public GameInit() { }
     }
 }

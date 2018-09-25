@@ -15,5 +15,8 @@ namespace MCTProcon29Protocol.Methods
         {
             Turn = turn;
         }
+
+        // DO NOT ERASE
+        public TurnEnd() { }
     }
 }

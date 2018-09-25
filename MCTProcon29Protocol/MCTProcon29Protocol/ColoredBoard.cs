@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
+using MessagePack;
 
 namespace MCTProcon29Protocol
 {
@@ -51,13 +52,19 @@ namespace MCTProcon29Protocol
     //    }
     //}
 
+    [MessagePackObject]
     public unsafe struct ColoredBoardSmallBigger : ColoredBoard
     {
-        private const int BoardSize = 12;
+        [IgnoreMember]
+        internal const int BoardSize = 12;
 
-        private fixed ushort board[BoardSize];
+        [Key(2)]
+        // DO2N'T USE!
+        internal fixed ushort board[BoardSize];
 
+        [Key(0)]
         public uint Width { get; private set; }
+        [Key(1)]
         public uint Height { get; private set; }
 
         public ColoredBoardSmallBigger(uint width = 1, uint height = 1)
@@ -77,6 +84,7 @@ namespace MCTProcon29Protocol
             }
         }
 
+        [IgnoreMember]
         public bool this[uint x, uint y] {
             get {
 #if DEBUG
@@ -104,6 +112,7 @@ namespace MCTProcon29Protocol
             }
         }
 
+        [IgnoreMember]
         public bool this[Point p] {
             get => this[p.X, p.Y];
             set => this[p.X, p.Y] = value;

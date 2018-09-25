@@ -18,5 +18,8 @@ namespace MCTProcon29Protocol.Methods
             Agent1 = agent1;
             Agent2 = agent2;
         }
+
+        // DO NOT ERASE
+        public RebaseByUser() { }
     }
 }

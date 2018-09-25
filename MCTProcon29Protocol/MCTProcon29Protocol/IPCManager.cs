@@ -12,6 +12,12 @@ namespace MCTProcon29Protocol
 {
     public class IPCManager
     {
+        static IPCManager()
+        {
+            MessagePack.Resolvers.CompositeResolver.RegisterAndSetAsDefault(
+                new MessagePack.Formatters.IMessagePackFormatter[] { new ColoredBoardFormatter() }, new[] { MessagePack.Resolvers.StandardResolver.Instance });
+        }
+
         TcpListener listener;
         TcpClient client;
         NetworkStream stream;
@@ -165,6 +171,9 @@ namespace MCTProcon29Protocol
                 }
                 catch (Exception ex)
                 {
+                    if (ex is TimeoutException) continue;
+                    if (ex is ObjectDisposedException) return;
+                    if (ex.InnerException is SocketException && ((SocketException)(ex.InnerException)).ErrorCode == 10060) continue;
                     OnExceptionThrown?.Invoke(ex);
                 }
             }

@@ -15,5 +15,8 @@ namespace MCTProcon29Protocol.Methods
         {
             IsEnter = isEnter;
         }
+
+        // DO NOT ERASE
+        public Pause() { }
     }
 }

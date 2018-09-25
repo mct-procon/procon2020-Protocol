@@ -21,6 +21,9 @@ namespace MCTProcon29Protocol.Methods
             Kind = (byte)kind;
             ProcessId = System.Diagnostics.Process.GetCurrentProcess().Id;
         }
+
+        // DO NOT ERASE
+        public Connect(){}
     }
 
 

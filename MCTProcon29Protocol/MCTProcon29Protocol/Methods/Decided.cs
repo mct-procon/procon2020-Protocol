@@ -9,16 +9,19 @@ namespace MCTProcon29Protocol.Methods
     public class Decided
     {
         [Key(0)]
-        public Point MeAgent1 { get; set; }
+        public VelocityPoint MeAgent1 { get; set; }
 
         [Key(1)]
-        public Point MeAgent2 { get; set; }
+        public VelocityPoint MeAgent2 { get; set; }
 
 
-        public Decided(Point agent1, Point agent2)
+        public Decided(VelocityPoint agent1, VelocityPoint agent2)
         {
             MeAgent1 = agent1;
             MeAgent2 = agent2;
         }
+
+        // DO NOT ERASE
+        public Decided() { }
     }
 }
