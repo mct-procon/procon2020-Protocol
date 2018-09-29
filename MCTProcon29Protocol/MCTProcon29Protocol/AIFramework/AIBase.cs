@@ -20,6 +20,7 @@ namespace MCTProcon29Protocol.AIFramework
         private System.Timers.Timer timer;
 
         public bool IsWriteLog { get; set; } = false;
+        public bool IsWriteBoard { get; set; } = false;
 
         public sbyte[,] ScoreBoard { get; set; }
         public Point MyAgent1 { get; set; }
@@ -45,15 +46,16 @@ namespace MCTProcon29Protocol.AIFramework
             timer.AutoReset = false;
         }
 
-        public virtual void StartSync(int port, bool isWriteLog = false)
+        public virtual void StartSync(int port, bool isWriteLog = false, bool isWriteBoard = false)
         {
-            Start(port, isWriteLog);
+            Start(port, isWriteLog, isWriteBoard);
             SynchronizeStopper.Wait();
         }
-        public virtual void Start(int port, bool isWriteLog = false)
+        public virtual void Start(int port, bool isWriteLog = false, bool isWriteBoard = false)
         {
             SynchronizeStopper.Reset();
             IsWriteLog = isWriteLog;
+            IsWriteBoard = isWriteBoard;
             ipc.Start(port);
             {
                 var proc = System.Diagnostics.Process.GetCurrentProcess();
@@ -150,13 +152,14 @@ namespace MCTProcon29Protocol.AIFramework
         private void StartSolve()
         {
             Canceller = new CancellationTokenSource();
-            SolverTask = Task.Run((Action)Solve, Canceller.Token);
+            CancellationToken = Canceller.Token;
+            SolverTask = Task.Run((Action)Solve, CancellationToken);
             Log("[SOLVER] Solver Started.");
         }
 
         protected virtual void DumpBoard(in ColoredBoardSmallBigger MyBoard, in ColoredBoardSmallBigger EnemyBoard, Point Me1, Point Me2, Point Enemy1, Point Enemy2 )
         {
-            if (!IsWriteLog) return;
+            if (!IsWriteBoard) return;
             lock (LogSyncRoot)
             {
                 for (uint y = 0; y < ScoreBoard.GetLength(1); ++y)
@@ -222,7 +225,10 @@ namespace MCTProcon29Protocol.AIFramework
             else
             {
                 Log("[SOLVER] State is {0}", SolverTask.Status);
-                Canceller?.Cancel();
+                if (SolverTask.IsCompleted)
+                    Canceller?.Dispose();
+                else
+                    Canceller?.Cancel();
                 if (SolverResult != null)
                     ipc.Write<Methods.Decided>(DataKind.Decided, SolverResult);
                 else
