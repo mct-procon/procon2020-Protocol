@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MCTProcon29Protocol", "MCTProcon29Protocol\MCTProcon29Protocol.csproj", "{E893A5B3-F3D3-4EA0-85DF-0FF9397C4C3D}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MCTProcon29Protocol-cpp", "MCTProcon29Protocol-cpp\MCTProcon29Protocol-cpp.vcxproj", "{11B0E21F-7048-4031-AC27-7A9A09482A3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MCTProcon29Protocol", "MCTProcon29Protocol\MCTProcon29Protocol.csproj", "{E893A5B3-F3D3-4EA0-85DF-0FF9397C4C3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,16 +27,6 @@ Global
 		{E893A5B3-F3D3-4EA0-85DF-0FF9397C4C3D}.Release|x64.Build.0 = Release|Any CPU
 		{E893A5B3-F3D3-4EA0-85DF-0FF9397C4C3D}.Release|x86.ActiveCfg = Release|Any CPU
 		{E893A5B3-F3D3-4EA0-85DF-0FF9397C4C3D}.Release|x86.Build.0 = Release|Any CPU
-		{11B0E21F-7048-4031-AC27-7A9A09482A3C}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{11B0E21F-7048-4031-AC27-7A9A09482A3C}.Debug|x64.ActiveCfg = Debug|x64
-		{11B0E21F-7048-4031-AC27-7A9A09482A3C}.Debug|x64.Build.0 = Debug|x64
-		{11B0E21F-7048-4031-AC27-7A9A09482A3C}.Debug|x86.ActiveCfg = Debug|Win32
-		{11B0E21F-7048-4031-AC27-7A9A09482A3C}.Debug|x86.Build.0 = Debug|Win32
-		{11B0E21F-7048-4031-AC27-7A9A09482A3C}.Release|Any CPU.ActiveCfg = Release|Win32
-		{11B0E21F-7048-4031-AC27-7A9A09482A3C}.Release|x64.ActiveCfg = Release|x64
-		{11B0E21F-7048-4031-AC27-7A9A09482A3C}.Release|x64.Build.0 = Release|x64
-		{11B0E21F-7048-4031-AC27-7A9A09482A3C}.Release|x86.ActiveCfg = Release|Win32
-		{11B0E21F-7048-4031-AC27-7A9A09482A3C}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

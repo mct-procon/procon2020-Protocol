@@ -50,7 +50,24 @@ namespace MCTProcon29Protocol
             IPCThread.Start();
         }
 
-        public IPCManager(IIPCClientReader client)
+        public void StartSync(int port)
+        {
+            var ipAddress = Dns.GetHostEntry("localhost").AddressList[0];
+
+            if (isClient)
+                _port = port;
+            else
+            {
+                listener = new TcpListener(ipAddress, port);
+                listener.Start();
+            }
+            IPCThread = new Thread(ServerMainAction);
+            IPCThread.Start();
+            IPCThread.Join();
+        }
+
+
+    public IPCManager(IIPCClientReader client)
         {
             Contract.Requires(client != null);
             isClient = true;
@@ -189,7 +206,7 @@ namespace MCTProcon29Protocol
             stream.Write(message, 0, message.Length);
         }
 
-        public void ShutdownServer()
+        public void Shutdown()
         {
             isStopRequired = true;
             Thread.Sleep(800);
