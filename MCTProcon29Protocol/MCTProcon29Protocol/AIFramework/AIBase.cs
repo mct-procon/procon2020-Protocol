@@ -17,9 +17,7 @@ namespace MCTProcon29Protocol.AIFramework
 
         protected Task SolverTask;
 
-        private Timer timer;
-
-        private TurnStart turnStart;
+        private System.Timers.Timer timer;
 
         public bool IsWriteLog { get; set; } = false;
 
@@ -42,6 +40,9 @@ namespace MCTProcon29Protocol.AIFramework
         public AIBase()
         {
             ipc = new IPCManager(this);
+            timer = new System.Timers.Timer();
+            timer.Elapsed += this.EndSolve;
+            timer.AutoReset = false;
         }
 
         public virtual void StartSync(int port, bool isWriteLog = false)
@@ -51,6 +52,7 @@ namespace MCTProcon29Protocol.AIFramework
         }
         public virtual void Start(int port, bool isWriteLog = false)
         {
+            SynchronizeStopper.Reset();
             IsWriteLog = isWriteLog;
             ipc.Start(port);
             {
@@ -78,11 +80,12 @@ namespace MCTProcon29Protocol.AIFramework
             EnemyAgent2 = init.EnemyAgent2;
             TurnCount = init.Turns;
 
-            timer = new Timer(this.EndSolve);
         }
 
         public void OnTurnStart(TurnStart turn)
         {
+            MyBoard = turn.MeColoredBoard;
+            EnemyBoard = turn.EnemyColoredBoard;
             MyAgent1 = turn.MeAgent1;
             MyAgent2 = turn.MeAgent2;
             EnemyAgent1 = turn.EnemyAgent1;
@@ -93,13 +96,14 @@ namespace MCTProcon29Protocol.AIFramework
             DumpBoard(turn.MeColoredBoard, turn.EnemyColoredBoard, MyAgent1, MyAgent1, EnemyAgent1, EnemyAgent2);
 
             StartSolve();
-            timer.Change(0, CalculateTimerMiliSconds(turn.WaitMiliSeconds));
+            timer.Interval = CalculateTimerMiliSconds(turn.WaitMiliSeconds);
+            timer.Enabled = true;
         }
 
         public void OnTurnEnd(TurnEnd turn)
         {
             if (IsWriteLog)
-                Console.WriteLine("[IPC] Received TurnStart");
+                Console.WriteLine("[IPC] Receive TurnEnd");
             Canceller?.Cancel();
         }
 
@@ -147,6 +151,7 @@ namespace MCTProcon29Protocol.AIFramework
         {
             Canceller = new CancellationTokenSource();
             SolverTask = Task.Run((Action)Solve, Canceller.Token);
+            Log("[SOLVER] Solver Started.");
         }
 
         protected virtual void DumpBoard(in ColoredBoardSmallBigger MyBoard, in ColoredBoardSmallBigger EnemyBoard, Point Me1, Point Me2, Point Enemy1, Point Enemy2 )
@@ -199,16 +204,31 @@ namespace MCTProcon29Protocol.AIFramework
             }
         }
 
-        protected abstract void InitGame(GameInit init);
         protected abstract void EndGame(GameEnd end);
         protected abstract void Solve();
         protected virtual int CalculateTimerMiliSconds(int miliseconds) => miliseconds - 1000;
-        protected virtual void EndSolve(object state)
+        protected virtual void EndSolve(object sender, EventArgs e)
         {
-            timer.Change(Timeout.Infinite, Timeout.Infinite);
-            Canceller?.Cancel();
-            if(SolverResult != null)
-                ipc.Write<Methods.Decided>(DataKind.Decided, SolverResult);
+            timer.Enabled = false;
+            if (SolverTask.IsFaulted)
+            {
+                lock (LogSyncRoot)
+                {
+                    Console.WriteLine("[SOLVER] An exception is thrown.====");
+                    Console.WriteLine(SolverTask.Exception);
+                    Console.WriteLine("======");
+                }
+            }
+            else
+            {
+                Log("[SOLVER] State is {0}", SolverTask.Status);
+                Canceller?.Cancel();
+                if (SolverResult != null)
+                    ipc.Write<Methods.Decided>(DataKind.Decided, SolverResult);
+                else
+                    Log("[SOLVER] Decision is NULL!!");
+            }
+            Log("[SOLVER] Thinking Stop.");
         }
     }
 }
