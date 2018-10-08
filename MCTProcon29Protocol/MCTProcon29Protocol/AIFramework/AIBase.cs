@@ -34,6 +34,8 @@ namespace MCTProcon29Protocol.AIFramework
         public int CurrentTurn { get; set; }
         public int TurnCount { get; set; }
 
+        private volatile bool SendingFinished = false;
+
         public object LogSyncRoot = new object();
 
         private ManualResetEventSlim SynchronizeStopper = new ManualResetEventSlim(false);
@@ -154,7 +156,15 @@ namespace MCTProcon29Protocol.AIFramework
             Canceller = new CancellationTokenSource();
             CancellationToken = Canceller.Token;
             SolverTask = Task.Run((Action)Solve, CancellationToken);
+            SolverTask.ContinueWith(ContinuationAction);
             Log("[SOLVER] Solver Started.");
+        }
+
+        private void ContinuationAction(Task prevTask) {
+            if (!prevTask.IsCompleted || prevTask.IsCanceled) return;
+            Log("[SOLVER] Solver Finished.");
+            SendingFinished = true;
+            SendDecided();
         }
 
         protected virtual void DumpBoard(in ColoredBoardSmallBigger MyBoard, in ColoredBoardSmallBigger EnemyBoard, Point Me1, Point Me2, Point Enemy1, Point Enemy2 )
@@ -213,6 +223,9 @@ namespace MCTProcon29Protocol.AIFramework
         protected virtual void EndSolve(object sender, EventArgs e)
         {
             timer.Enabled = false;
+            var flag = SendingFinished;
+            SendingFinished = false;
+            if (flag) return;
             if (SolverTask.IsFaulted)
             {
                 lock (LogSyncRoot)
@@ -229,12 +242,20 @@ namespace MCTProcon29Protocol.AIFramework
                     Canceller?.Dispose();
                 else
                     Canceller?.Cancel();
-                if (SolverResult != null)
-                    ipc.Write<Methods.Decided>(DataKind.Decided, SolverResult);
-                else
-                    Log("[SOLVER] Decision is NULL!!");
+                SendDecided();
             }
             Log("[SOLVER] Thinking Stop.");
+        }
+
+        protected virtual void SendDecided()
+        {
+            if (SolverResult != null)
+            {
+                ipc.Write<Methods.Decided>(DataKind.Decided, SolverResult);
+                Log("[IPC] Decided Sended");
+            }
+            else
+                Log("[SOLVER] Decision is NULL!!\n[IPC] Decided Sending Failed");
         }
     }
 }

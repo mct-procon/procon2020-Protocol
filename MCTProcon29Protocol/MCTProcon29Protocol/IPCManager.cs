@@ -7,6 +7,7 @@ using System.Threading;
 using System.Diagnostics.Contracts;
 using System.IO;
 using MessagePack;
+using System.Threading.Tasks;
 
 namespace MCTProcon29Protocol
 {
@@ -21,13 +22,14 @@ namespace MCTProcon29Protocol
         TcpListener listener;
         TcpClient client;
         NetworkStream stream;
-        Thread IPCThread;     // このスレッドは頻繁に作成・削除されない．
+        Task IPCThread;     // このスレッドは頻繁に作成・削除されない．
 
         IIPCClientReader clientReader;
         IIPCServerReader serverReader;
 
         Queue<byte[]> writeQueue = new Queue<byte[]>();
 
+        CancellationTokenSource Canceller;
 
         int _port = 0;
         bool isClient;
@@ -46,8 +48,8 @@ namespace MCTProcon29Protocol
                 listener = new TcpListener(ipAddress, port);
                 listener.Start();
             }
-            IPCThread = new Thread(ServerMainAction);
-            IPCThread.Start();
+            Canceller = new CancellationTokenSource();
+            IPCThread = ServerMainAction();
         }
 
         public void StartSync(int port)
@@ -61,9 +63,9 @@ namespace MCTProcon29Protocol
                 listener = new TcpListener(ipAddress, port);
                 listener.Start();
             }
-            IPCThread = new Thread(ServerMainAction);
-            IPCThread.Start();
-            IPCThread.Join();
+            Canceller = new CancellationTokenSource();
+            IPCThread = ServerMainAction();
+            IPCThread.Wait();
         }
 
 
@@ -81,7 +83,7 @@ namespace MCTProcon29Protocol
             this.serverReader = server;
         }
 
-        public void ServerMainAction()
+        public async Task ServerMainAction()
         {
             try
             {
@@ -93,7 +95,6 @@ namespace MCTProcon29Protocol
                 return;
             }
             stream = client.GetStream();
-            stream.ReadTimeout = 800;
 
             int bufferSize = 0;
             int messageSize = 0;
@@ -101,13 +102,16 @@ namespace MCTProcon29Protocol
             int current = 0;
             byte[] headBuffer = new byte[4];
             byte[] messageBuffer = new byte[1024];
+
+            CancellationToken cancelToken = Canceller.Token;
+
             while (true)
             {
                 try
                 {
                     while (true)
                     {
-                        bufferSize = stream.Read(headBuffer, 0, 4);
+                        bufferSize = await stream.ReadAsync(headBuffer, 0, 4, cancelToken);
                         if (isStopRequired)
                             return;
                         if (bufferSize == 4)
@@ -120,7 +124,7 @@ namespace MCTProcon29Protocol
                     data_kind_read_start:
                     while (true)
                     {
-                        bufferSize = stream.Read(headBuffer, 0, 4);
+                        bufferSize = await stream.ReadAsync(headBuffer, 0, 4, cancelToken);
                         if (isStopRequired)
                             return;
                         if (bufferSize == 4)
@@ -134,7 +138,7 @@ namespace MCTProcon29Protocol
                     byte[] currentBuffer = messageBuffer.Length < messageSize ? new byte[messageSize] : messageBuffer;
                     while (current < messageSize)
                     {
-                        bufferSize = stream.Read(currentBuffer, current, messageSize);
+                        bufferSize = await stream.ReadAsync(currentBuffer, current, messageSize, cancelToken);
                         current += bufferSize;
                         if (isStopRequired)
                             return;
@@ -209,10 +213,12 @@ namespace MCTProcon29Protocol
         public void Shutdown()
         {
             isStopRequired = true;
+            Canceller?.Cancel();
             Thread.Sleep(800);
             stream?.Close();
             client?.Close();
             listener?.Stop();
+            Canceller.Dispose();
         }
     }
 }
