@@ -58,7 +58,7 @@ namespace MCTProcon29Protocol.AIFramework
             SynchronizeStopper.Reset();
             IsWriteLog = isWriteLog;
             IsWriteBoard = isWriteBoard;
-            ipc.Start(port);
+            Task.Run(() => ipc.Start(port));
             {
                 var proc = System.Diagnostics.Process.GetCurrentProcess();
                 ipc.Write(DataKind.Connect, new Connect(ProgramKind.AI) { ProcessId = proc.Id });
@@ -95,6 +95,7 @@ namespace MCTProcon29Protocol.AIFramework
             EnemyAgent1 = turn.EnemyAgent1;
             EnemyAgent2 = turn.EnemyAgent2;
             CurrentTurn = turn.Turn;
+            SendingFinished = false;
 
             Log("[IPC] Receive TurnStart turn = {0}", turn.Turn);
             DumpBoard(turn.MeColoredBoard, turn.EnemyColoredBoard, MyAgent1, MyAgent1, EnemyAgent1, EnemyAgent2);
@@ -161,9 +162,9 @@ namespace MCTProcon29Protocol.AIFramework
         }
 
         private void ContinuationAction(Task prevTask) {
+            if (SendingFinished) return;
             if (!prevTask.IsCompleted || prevTask.IsCanceled) return;
             Log("[SOLVER] Solver Finished.");
-            SendingFinished = true;
             SendDecided();
         }
 
@@ -219,13 +220,11 @@ namespace MCTProcon29Protocol.AIFramework
 
         protected abstract void EndGame(GameEnd end);
         protected abstract void Solve();
-        protected virtual int CalculateTimerMiliSconds(int miliseconds) => miliseconds - 1000;
+        protected virtual int CalculateTimerMiliSconds(int miliseconds) => miliseconds - 1500;
         protected virtual void EndSolve(object sender, EventArgs e)
         {
             timer.Enabled = false;
-            var flag = SendingFinished;
-            SendingFinished = false;
-            if (flag) return;
+            if (SendingFinished) return;
             if (SolverTask.IsFaulted)
             {
                 lock (LogSyncRoot)
@@ -249,6 +248,7 @@ namespace MCTProcon29Protocol.AIFramework
 
         protected virtual void SendDecided()
         {
+            SendingFinished = true;
             if (SolverResult != null)
             {
                 ipc.Write<Methods.Decided>(DataKind.Decided, SolverResult);

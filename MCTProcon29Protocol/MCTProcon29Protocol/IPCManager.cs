@@ -36,7 +36,7 @@ namespace MCTProcon29Protocol
 
         public event Action<Exception> OnExceptionThrown;
 
-        public async void StartAsync(int port)
+        public async Task StartAsync(int port)
         {
             var ipAddress = Dns.GetHostEntry("localhost").AddressList[0];
 
@@ -84,16 +84,22 @@ namespace MCTProcon29Protocol
 
         public async Task ServerMainAction()
         {
-            try
+            await Task.Run(() =>
             {
-                client = isClient ? new TcpClient("localhost", _port) : listener.AcceptTcpClient();
-            }catch(SocketException ex)
-            {
-                if (ex.ErrorCode != 10004)
-                    System.Diagnostics.Debugger.Break();
-                return;
-            }
-            stream = client.GetStream();
+                try
+                {
+                    client = isClient ? new TcpClient("localhost", _port) : listener.AcceptTcpClient();
+                }
+                catch (SocketException ex)
+                {
+                    if (ex.ErrorCode != 10004)
+                        System.Diagnostics.Debugger.Break();
+                    return;
+                }
+                stream = client.GetStream();
+            });
+
+            client.ReceiveTimeout = Timeout.Infinite;
 
             int bufferSize = 0;
             int messageSize = 0;
@@ -195,6 +201,7 @@ namespace MCTProcon29Protocol
                     if (ex is ObjectDisposedException) return;
                     if (ex.InnerException is SocketException && ((SocketException)(ex.InnerException)).ErrorCode == 10060) continue;
                     OnExceptionThrown?.Invoke(ex);
+                    if (ex is IOException) return;
                 }
             }
         }
