@@ -22,7 +22,6 @@ namespace MCTProcon29Protocol
         TcpListener listener;
         TcpClient client;
         NetworkStream stream;
-        Task IPCThread;     // このスレッドは頻繁に作成・削除されない．
 
         IIPCClientReader clientReader;
         IIPCServerReader serverReader;
@@ -37,6 +36,21 @@ namespace MCTProcon29Protocol
 
         public event Action<Exception> OnExceptionThrown;
 
+        public async void StartAsync(int port)
+        {
+            var ipAddress = Dns.GetHostEntry("localhost").AddressList[0];
+
+            if (isClient)
+                _port = port;
+            else
+            {
+                listener = new TcpListener(ipAddress, port);
+                listener.Start();
+            }
+            Canceller = new CancellationTokenSource();
+            await ServerMainAction();
+        }
+
         public void Start(int port)
         {
             var ipAddress = Dns.GetHostEntry("localhost").AddressList[0];
@@ -49,22 +63,7 @@ namespace MCTProcon29Protocol
                 listener.Start();
             }
             Canceller = new CancellationTokenSource();
-            IPCThread = ServerMainAction();
-        }
-
-        public void StartSync(int port)
-        {
-            var ipAddress = Dns.GetHostEntry("localhost").AddressList[0];
-
-            if (isClient)
-                _port = port;
-            else
-            {
-                listener = new TcpListener(ipAddress, port);
-                listener.Start();
-            }
-            Canceller = new CancellationTokenSource();
-            IPCThread = ServerMainAction();
+            var IPCThread = ServerMainAction();
             IPCThread.Wait();
         }
 
