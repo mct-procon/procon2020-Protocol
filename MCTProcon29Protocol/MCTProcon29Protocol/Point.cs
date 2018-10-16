@@ -56,6 +56,20 @@ namespace MCTProcon29Protocol
             return x;
         }
 
+        public static Point operator +(Point x, Point y)
+        {
+            x.X += y.X;
+            x.Y += y.Y;
+            return x;
+        }
+
+        public static Point operator -(Point x, Point y)
+        {
+            x.X -= y.X;
+            x.Y -= y.Y;
+            return x;
+        }
+
         public static Point operator +(Point x, VelocityPoint y)
         {
             x.X = (uint)((int)x.X + y.X);
@@ -68,6 +82,11 @@ namespace MCTProcon29Protocol
             x.X = (uint)((int)x.X - y.X);
             x.Y = (uint)((int)x.Y - y.Y);
             return x;
+        }
+
+        public override string ToString()
+        {
+            return $"({X},{Y})";
         }
     }
 }
