@@ -56,6 +56,20 @@ namespace MCTProcon29Protocol
             return x;
         }
 
+        public static Point operator +(Point x, (uint x, uint y) y)
+        {
+            x.X += y.x;
+            x.Y += y.y;
+            return x;
+        }
+
+        public static Point operator -(Point x, (uint x, uint y) y)
+        {
+            x.X -= y.x;
+            x.Y -= y.y;
+            return x;
+        }
+
         public static Point operator +(Point x, Point y)
         {
             x.X += y.X;
