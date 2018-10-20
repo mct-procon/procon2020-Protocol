@@ -165,6 +165,19 @@ namespace MCTProcon29Protocol.AIFramework
             if (SendingFinished) return;
             if (!prevTask.IsCompleted || prevTask.IsCanceled) return;
             Log("[SOLVER] Solver Finished.");
+            if (SolverTask.IsFaulted)
+            {
+                lock (LogSyncRoot)
+                {
+                    Console.WriteLine("[SOLVER] An exception is thrown.====");
+                    Console.WriteLine(SolverTask.Exception);
+                    Console.WriteLine("======");
+                }
+            }
+            else
+            {
+                Log("[SOLVER] State is {0}", SolverTask.Status);
+            }
             SendDecided();
         }
 

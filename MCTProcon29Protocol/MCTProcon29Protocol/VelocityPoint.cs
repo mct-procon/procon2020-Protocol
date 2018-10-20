@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using MessagePack;
+using System.Numerics;
 
 namespace MCTProcon29Protocol
 {
