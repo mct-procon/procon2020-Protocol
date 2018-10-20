@@ -20,5 +20,6 @@ namespace MCTProcon29Protocol
         void OnConnect(Methods.Connect connect);
         void OnDecided(Methods.Decided decided);
         void OnInterrupt(Methods.Interrupt interrupt);
+        void OnAIProcessExited(IIPCServerReader sender, EventArgs e);
     }
 }

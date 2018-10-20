@@ -8,6 +8,7 @@ using System.Diagnostics.Contracts;
 using System.IO;
 using MessagePack;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace MCTProcon29Protocol
 {
@@ -26,13 +27,14 @@ namespace MCTProcon29Protocol
         IIPCClientReader clientReader;
         IIPCServerReader serverReader;
 
+        Process AIProcess = null;
+
         Queue<byte[]> writeQueue = new Queue<byte[]>();
 
         CancellationTokenSource Canceller;
 
         int _port = 0;
         bool isClient;
-        bool isStopRequired = false;
 
         public event Action<Exception> OnExceptionThrown;
 
@@ -93,7 +95,7 @@ namespace MCTProcon29Protocol
         }
 
 
-    public IPCManager(IIPCClientReader client)
+        public IPCManager(IIPCClientReader client)
         {
             Contract.Requires(client != null);
             isClient = true;
@@ -127,7 +129,7 @@ namespace MCTProcon29Protocol
                     while (true)
                     {
                         bufferSize = await stream.ReadAsync(headBuffer, 0, 4, cancelToken);
-                        if (isStopRequired)
+                        if (Canceller.IsCancellationRequested)
                             return;
                         if (bufferSize == 4)
                         {
@@ -140,7 +142,7 @@ namespace MCTProcon29Protocol
                     while (true)
                     {
                         bufferSize = await stream.ReadAsync(headBuffer, 0, 4, cancelToken);
-                        if (isStopRequired)
+                        if (Canceller.IsCancellationRequested)
                             return;
                         if (bufferSize == 4)
                         {
@@ -155,7 +157,7 @@ namespace MCTProcon29Protocol
                     {
                         bufferSize = await stream.ReadAsync(currentBuffer, current, messageSize, cancelToken);
                         current += bufferSize;
-                        if (isStopRequired)
+                        if (Canceller.IsCancellationRequested)
                             return;
                     }
                     if (isClient)
@@ -192,7 +194,11 @@ namespace MCTProcon29Protocol
                         switch(currentKind)
                         {
                             case Methods.DataKind.Connect:
-                                serverReader.OnConnect(MessagePackSerializer.Deserialize<Methods.Connect>(currentBuffer));
+                                var Data = MessagePackSerializer.Deserialize<Methods.Connect>(currentBuffer);
+                                AIProcess = Process.GetProcessById(Data.ProcessId);
+                                AIProcess.EnableRaisingEvents = true;
+                                AIProcess.Exited += __onAIProcessExited;
+                                serverReader.OnConnect(Data);
                                 break;
                             case Methods.DataKind.Decided:
                                 serverReader.OnDecided(MessagePackSerializer.Deserialize<Methods.Decided>(currentBuffer));
@@ -216,25 +222,38 @@ namespace MCTProcon29Protocol
             }
         }
 
+        private void __onAIProcessExited(object sender, EventArgs e)
+        {
+            serverReader.OnAIProcessExited(serverReader, e);
+        }
+
         public void Write<T>(Methods.DataKind datakind, T data)
         {
-            byte[] message = MessagePackSerializer.Serialize(data);
-            byte[] cache = BitConverter.GetBytes(message.Length);
-            stream.Write(cache, 0, cache.Length);
-            cache = BitConverter.GetBytes((int)datakind);
-            stream.Write(cache, 0, cache.Length);
-            stream.Write(message, 0, message.Length);
-        }
+            try
+            {
+                byte[] message = MessagePackSerializer.Serialize(data);
+                byte[] cache = BitConverter.GetBytes(message.Length);
+                stream.Write(cache, 0, cache.Length);
+                cache = BitConverter.GetBytes((int)datakind);
+                stream.Write(cache, 0, cache.Length);
+                stream.Write(message, 0, message.Length);
+            }
+            catch (IOException ex)
+            {
+            }
+        } 
 
         public void Shutdown()
         {
-            isStopRequired = true;
             Canceller?.Cancel();
             Thread.Sleep(800);
             stream?.Close();
             client?.Close();
             listener?.Stop();
             Canceller.Dispose();
+            if (AIProcess != null)
+                AIProcess.Exited -= __onAIProcessExited;
         }
+
     }
 }

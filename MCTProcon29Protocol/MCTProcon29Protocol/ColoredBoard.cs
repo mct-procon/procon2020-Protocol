@@ -59,7 +59,7 @@ namespace MCTProcon29Protocol
         internal const int BoardSize = 12;
 
         [Key(2)]
-        // DO2N'T USE!
+        // DON'T USE!
         internal fixed ushort board[BoardSize];
 
         [Key(0)]
