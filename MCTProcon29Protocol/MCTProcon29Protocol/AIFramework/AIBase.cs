@@ -53,18 +53,17 @@ namespace MCTProcon29Protocol.AIFramework
             Start(port, isWriteLog, isWriteBoard);
             SynchronizeStopper.Wait();
         }
-        public virtual void Start(int port, bool isWriteLog = false, bool isWriteBoard = false)
+        public virtual async Task Start(int port, bool isWriteLog = false, bool isWriteBoard = false)
         {
             SynchronizeStopper.Reset();
             IsWriteLog = isWriteLog;
             IsWriteBoard = isWriteBoard;
-            Task.Run(() => ipc.Start(port));
-            {
-                var proc = System.Diagnostics.Process.GetCurrentProcess();
-                ipc.Write(DataKind.Connect, new Connect(ProgramKind.AI) { ProcessId = proc.Id });
-                proc.Dispose();
-            }
+            await ipc.Connect(port);
+            var proc = System.Diagnostics.Process.GetCurrentProcess();
+            ipc.Write(DataKind.Connect, new Connect(ProgramKind.AI) { ProcessId = proc.Id });
+            proc.Dispose();
             Log("[IPC] Sended Connect");
+            await ipc.StartAsync();
         }
 
         public virtual void End()

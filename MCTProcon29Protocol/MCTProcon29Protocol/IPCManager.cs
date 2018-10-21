@@ -38,7 +38,14 @@ namespace MCTProcon29Protocol
 
         public event Action<Exception> OnExceptionThrown;
 
-        public async Task StartAsync(int port)
+        public bool IsReady => stream != null;
+
+        public async Task StartAsync()
+        {
+            await ServerMainAction();
+        }
+
+        public async Task Connect(int port)
         {
             var ipAddress = Dns.GetHostEntry("localhost").AddressList[0];
 
@@ -50,8 +57,11 @@ namespace MCTProcon29Protocol
                 listener.Start();
             }
             Canceller = new CancellationTokenSource();
-            await Task.Run(() =>
-            {
+            await Task.Run( async () =>
+            { 
+                begin:
+                if (Canceller.Token.IsCancellationRequested)
+                    return;
                 try
                 {
                     client = isClient ? new TcpClient("localhost", _port) : listener.AcceptTcpClient();
@@ -59,41 +69,15 @@ namespace MCTProcon29Protocol
                 catch (SocketException ex)
                 {
                     if (ex.ErrorCode != 10004)
-                        System.Diagnostics.Debugger.Break();
+                    {
+                        await Task.Delay(200, Canceller.Token);
+                        goto begin;
+                    }
                     return;
                 }
                 stream = client.GetStream();
-            });
-            await ServerMainAction();
+            }, Canceller.Token);
         }
-
-        public void Start(int port)
-        {
-            var ipAddress = Dns.GetHostEntry("localhost").AddressList[0];
-
-            if (isClient)
-                _port = port;
-            else
-            {
-                listener = new TcpListener(ipAddress, port);
-                listener.Start();
-            }
-            Canceller = new CancellationTokenSource();
-            try
-            {
-                client = isClient ? new TcpClient("localhost", _port) : listener.AcceptTcpClient();
-            }
-            catch (SocketException ex)
-            {
-                if (ex.ErrorCode != 10004)
-                    System.Diagnostics.Debugger.Break();
-                return;
-            }
-            stream = client.GetStream();
-            var IPCThread = ServerMainAction();
-            IPCThread.Wait();
-        }
-
 
         public IPCManager(IIPCClientReader client)
         {
@@ -111,6 +95,10 @@ namespace MCTProcon29Protocol
 
         public async Task ServerMainAction()
         {
+            while(stream == null)
+            {
+                await Task.Delay(200);
+            }
             client.ReceiveTimeout = Timeout.Infinite;
 
             int bufferSize = 0;
