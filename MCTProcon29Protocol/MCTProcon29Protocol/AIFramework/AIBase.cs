@@ -13,7 +13,19 @@ namespace MCTProcon29Protocol.AIFramework
         protected CancellationTokenSource Canceller;
         protected CancellationToken CancellationToken;
 
-        protected Decided SolverResult;
+        protected DecidedEx SolverResultList = new DecidedEx();
+        protected Decided SolverResult {
+            get {
+                if (SolverResultList == null) return null;
+                if (SolverResultList.Count == 0) return null;
+                return SolverResultList[0];
+            }
+            set {
+                if (SolverResultList == null) SolverResultList = new DecidedEx();
+                if (SolverResultList.Count == 0) SolverResultList.Add(value);
+                else SolverResultList[0] = value;
+            }
+        }
 
         protected Task SolverTask;
 
@@ -25,6 +37,10 @@ namespace MCTProcon29Protocol.AIFramework
         public sbyte[,] ScoreBoard { get; set; }
         public Point MyAgent1 { get; set; }
         public Point MyAgent2 { get; set; }
+
+        public bool IsAgent1Moved { get; set; }
+        public bool IsAgent2Moved { get; set; }
+
         public Point EnemyAgent1 { get; set; }
         public Point EnemyAgent2 { get; set; }
 
@@ -91,6 +107,8 @@ namespace MCTProcon29Protocol.AIFramework
             EnemyBoard = turn.EnemyColoredBoard;
             MyAgent1 = turn.MeAgent1;
             MyAgent2 = turn.MeAgent2;
+            IsAgent1Moved = turn.IsAgent1Moved;
+            IsAgent2Moved = turn.IsAgent2Moved;
             EnemyAgent1 = turn.EnemyAgent1;
             EnemyAgent2 = turn.EnemyAgent2;
             CurrentTurn = turn.Turn;
@@ -155,6 +173,7 @@ namespace MCTProcon29Protocol.AIFramework
         {
             Canceller = new CancellationTokenSource();
             CancellationToken = Canceller.Token;
+            SolverResultList.Clear();
             SolverTask = Task.Run((Action)Solve, CancellationToken);
             SolverTask.ContinueWith(ContinuationAction);
             Log("[SOLVER] Solver Started.");
@@ -263,7 +282,7 @@ namespace MCTProcon29Protocol.AIFramework
             SendingFinished = true;
             if (SolverResult != null)
             {
-                ipc.Write<Methods.Decided>(DataKind.Decided, SolverResult);
+                ipc.Write<Methods.DecidedEx>(DataKind.DecidedEx, SolverResultList);
                 Log("[IPC] Decided Sended");
             }
             else

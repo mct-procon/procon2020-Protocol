@@ -32,7 +32,13 @@ namespace MCTProcon29Protocol.Methods
         [Key(7)]
         public ColoredBoardSmallBigger EnemyColoredBoard { get; set; }
 
-        public TurnStart(byte turn, int waitMiliSecs, Point meAgent1, Point meAgent2, Point enemyAgent1, Point enemyAgent2, in ColoredBoardSmallBigger meColoredBoard, in ColoredBoardSmallBigger enemyColoredBoard)
+        [Key(8)]
+        public bool IsAgent1Moved { get; set; }
+
+        [Key(9)]
+        public bool IsAgent2Moved { get; set; }
+
+        public TurnStart(byte turn, int waitMiliSecs, Point meAgent1, Point meAgent2, Point enemyAgent1, Point enemyAgent2, in ColoredBoardSmallBigger meColoredBoard, in ColoredBoardSmallBigger enemyColoredBoard, bool isAgent1Moved, bool isAgent2Moved)
         {
             Turn = turn;
             WaitMiliSeconds = waitMiliSecs;
@@ -42,6 +48,8 @@ namespace MCTProcon29Protocol.Methods
             EnemyAgent2 = enemyAgent2;
             MeColoredBoard = meColoredBoard;
             EnemyColoredBoard = enemyColoredBoard;
+            IsAgent1Moved = isAgent1Moved;
+            IsAgent2Moved = isAgent2Moved;
         }
 
         // DO NOT ERASE

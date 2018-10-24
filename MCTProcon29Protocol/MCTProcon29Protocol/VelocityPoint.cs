@@ -30,7 +30,7 @@ namespace MCTProcon29Protocol
         }
 
         public override int GetHashCode()
-            => (int)(X << 16) + (int)Y;
+            => (int)(X << 8) + (int)Y;
 
         public override bool Equals(object obj)
         {
@@ -58,5 +58,7 @@ namespace MCTProcon29Protocol
         }
 
         public static implicit operator VelocityPoint((int, int) x) => new VelocityPoint(x.Item1, x.Item2);
+
+        public override string ToString() => $"({X},{Y})";
     }
 }

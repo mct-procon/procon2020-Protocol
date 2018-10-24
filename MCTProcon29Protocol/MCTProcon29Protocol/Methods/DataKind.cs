@@ -16,6 +16,7 @@ namespace MCTProcon29Protocol.Methods
         GameEnd = 6,
         Interrupt = 7,
         Resume = 8,
-        RebaseByUser = 9
+        RebaseByUser = 9,
+        DecidedEx = 10
     }
 }
