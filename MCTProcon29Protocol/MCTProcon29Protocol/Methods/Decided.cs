@@ -46,8 +46,20 @@ namespace MCTProcon29Protocol.Methods
             return MeAgent1.GetHashCode() | (MeAgent2.GetHashCode() << 16);
         }
 
-        public static bool operator ==(Decided x, Decided y) => ((x is null) && (y is null)) || (x.MeAgent1 == y.MeAgent1 && x.MeAgent2 == y.MeAgent2);
-        public static bool operator !=(Decided x, Decided y) => !((x is null) && (y is null)) || x.MeAgent1 != y.MeAgent1 || x.MeAgent2 != y.MeAgent2;
+        public static bool operator ==(Decided x, Decided y)
+        {
+            if ((x is null) && (y is null)) return true;
+            if (x is null) return false;
+            if (y is null) return false;
+            return x.MeAgent1 == y.MeAgent1 && x.MeAgent2 == y.MeAgent2;
+        }
+        public static bool operator !=(Decided x, Decided y)
+        {
+            if ((x is null) && (y is null)) return false;
+            if (x is null) return true;
+            if (y is null) return true;
+            return x.MeAgent1 != y.MeAgent1 || x.MeAgent2 != y.MeAgent2;
+        }
 
         public override string ToString() => $"Agent1 = {MeAgent1}, Agent2 = {MeAgent2}, Score = {Score}";
     }
