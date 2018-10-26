@@ -37,7 +37,7 @@ namespace MCTProcon29Protocol.Methods
         public override bool Equals(object obj)
         {
             Decided other = obj as Decided;
-            if (other == null) return false;
+            if (other is null) return false;
             return this.MeAgent1 == other.MeAgent1 && this.MeAgent2 == other.MeAgent2;
         }
 
@@ -46,7 +46,7 @@ namespace MCTProcon29Protocol.Methods
             return MeAgent1.GetHashCode() | (MeAgent2.GetHashCode() << 16);
         }
 
-        public static bool operator ==(Decided x, Decided y) => ((x is null) && (y is null)) && x.MeAgent1 == y.MeAgent1 && x.MeAgent2 == y.MeAgent2;
+        public static bool operator ==(Decided x, Decided y) => ((x is null) && (y is null)) || (x.MeAgent1 == y.MeAgent1 && x.MeAgent2 == y.MeAgent2);
         public static bool operator !=(Decided x, Decided y) => !((x is null) && (y is null)) || x.MeAgent1 != y.MeAgent1 || x.MeAgent2 != y.MeAgent2;
 
         public override string ToString() => $"Agent1 = {MeAgent1}, Agent2 = {MeAgent2}, Score = {Score}";
