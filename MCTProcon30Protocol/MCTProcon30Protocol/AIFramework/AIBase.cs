@@ -13,15 +13,15 @@ namespace MCTProcon30Protocol.AIFramework
         protected CancellationTokenSource Canceller;
         protected CancellationToken CancellationToken;
 
-        protected DecidedEx SolverResultList = new DecidedEx();
-        protected Decided SolverResult {
+        protected Decided SolverResultList = new Decided();
+        protected Decision SolverResult {
             get {
                 if (SolverResultList == null) return null;
                 if (SolverResultList.Count == 0) return null;
                 return SolverResultList[0];
             }
             set {
-                if (SolverResultList == null) SolverResultList = new DecidedEx();
+                if (SolverResultList == null) SolverResultList = new Decided();
                 if (SolverResultList.Count == 0) SolverResultList.Add(value);
                 else SolverResultList[0] = value;
             }
@@ -282,7 +282,7 @@ namespace MCTProcon30Protocol.AIFramework
             SendingFinished = true;
             if (SolverResult != null)
             {
-                ipc.Write<Methods.DecidedEx>(DataKind.DecidedEx, SolverResultList);
+                ipc.Write<Methods.Decided>(DataKind.DecidedEx, SolverResultList);
                 Log("[IPC] Decided Sended");
             }
             else

@@ -19,7 +19,6 @@ namespace MCTProcon30Protocol
     {
         void OnConnect(Methods.Connect connect);
         void OnDecided(Methods.Decided decided);
-        void OnDecidedEx(Methods.DecidedEx decided);
         void OnInterrupt(Methods.Interrupt interrupt);
         void OnAIProcessExited(IIPCServerReader sender, EventArgs e);
     }

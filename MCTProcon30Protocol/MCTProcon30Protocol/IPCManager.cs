@@ -191,9 +191,6 @@ namespace MCTProcon30Protocol
                             case Methods.DataKind.Decided:
                                 serverReader.OnDecided(MessagePackSerializer.Deserialize<Methods.Decided>(currentBuffer));
                                 break;
-                            case Methods.DataKind.DecidedEx:
-                                serverReader.OnDecidedEx(MessagePackSerializer.Deserialize<Methods.DecidedEx>(currentBuffer));
-                                break;
                             case Methods.DataKind.Interrupt:
                                 serverReader.OnInterrupt(MessagePackSerializer.Deserialize<Methods.Interrupt>(currentBuffer));
                                 break;

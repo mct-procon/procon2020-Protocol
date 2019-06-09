@@ -9,58 +9,25 @@ namespace MCTProcon30Protocol.Methods
     public class Decided
     {
         [Key(0)]
-        public VelocityPoint MeAgent1 { get; set; }
+        public List<Decision> Data { get; set; }
 
-        [Key(1)]
-        public VelocityPoint MeAgent2 { get; set; }
-
-        [Key(2)]
-        public int Score { get; set; }
-
-        public Decided(VelocityPoint agent1, VelocityPoint agent2)
-        {
-            MeAgent1 = agent1;
-            MeAgent2 = agent2;
-            Score = 0;
+        [IgnoreMember]
+        public Decision this[int index] {
+            get => Data[index];
+            set => Data[index] = value;
         }
 
-        public Decided(VelocityPoint agent1, VelocityPoint agent2, int score)
+        public Decided()
         {
-            MeAgent1 = agent1;
-            MeAgent2 = agent2;
-            Score = score;
+            Data = new List<Decision>(2);
         }
 
-        // DO NOT ERASE
-        public Decided() { }
-
-        public override bool Equals(object obj)
-        {
-            Decided other = obj as Decided;
-            if (other is null) return false;
-            return this.MeAgent1 == other.MeAgent1 && this.MeAgent2 == other.MeAgent2;
-        }
-
-        public override int GetHashCode()
-        {
-            return MeAgent1.GetHashCode() | (MeAgent2.GetHashCode() << 16);
-        }
-
-        public static bool operator ==(Decided x, Decided y)
-        {
-            if ((x is null) && (y is null)) return true;
-            if (x is null) return false;
-            if (y is null) return false;
-            return x.MeAgent1 == y.MeAgent1 && x.MeAgent2 == y.MeAgent2;
-        }
-        public static bool operator !=(Decided x, Decided y)
-        {
-            if ((x is null) && (y is null)) return false;
-            if (x is null) return true;
-            if (y is null) return true;
-            return x.MeAgent1 != y.MeAgent1 || x.MeAgent2 != y.MeAgent2;
-        }
-
-        public override string ToString() => $"Agent1 = {MeAgent1}, Agent2 = {MeAgent2}, Score = {Score}";
+        public void Clear() => Data.Clear();
+        [IgnoreMember]
+        public int Count => Data.Count;
+        public void Add(Decision data) => Data.Add(data);
+        public void Sort() => Data.Sort();
+        public void Sort(IComparer<Decision> comp) => Data.Sort(comp);
+        public void Sort(Comparison<Decision> comp) => Data.Sort(comp);
     }
 }
