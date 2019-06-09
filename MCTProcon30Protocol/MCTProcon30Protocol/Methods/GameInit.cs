@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace MCTProcon29Protocol.Methods
+namespace MCTProcon30Protocol.Methods
 {
     [MessagePackObject]
     public class GameInit

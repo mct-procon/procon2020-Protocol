@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace MCTProcon29Protocol
+namespace MCTProcon30Protocol
 {
     public interface IIPCClientReader
     {

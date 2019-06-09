@@ -4,7 +4,7 @@ using System.Text;
 using MessagePack;
 using System.Numerics;
 
-namespace MCTProcon29Protocol
+namespace MCTProcon30Protocol
 {
     /// <summary>
     /// x-y平面座標での場所を示す構造体

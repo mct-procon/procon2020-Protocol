@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using MCTProcon29Protocol.Methods;
+using MCTProcon30Protocol.Methods;
 
-namespace MCTProcon29Protocol.AIFramework
+namespace MCTProcon30Protocol.AIFramework
 {
     public abstract class AIBase : IIPCClientReader
     {

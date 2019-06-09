@@ -10,7 +10,7 @@ using MessagePack;
 using System.Threading.Tasks;
 using System.Diagnostics;
 
-namespace MCTProcon29Protocol
+namespace MCTProcon30Protocol
 {
     public class IPCManager
     {

@@ -4,7 +4,7 @@ using System.Numerics;
 using System.Text;
 using MessagePack;
 
-namespace MCTProcon29Protocol
+namespace MCTProcon30Protocol
 {
     public interface ColoredBoard
     {

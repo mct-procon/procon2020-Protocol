@@ -4,7 +4,7 @@ using System.Text;
 using MessagePack;
 using MessagePack.Formatters;
 
-namespace MCTProcon29Protocol
+namespace MCTProcon30Protocol
 {
     public class ColoredBoardFormatter : IMessagePackFormatter<ColoredBoardSmallBigger>
     {
