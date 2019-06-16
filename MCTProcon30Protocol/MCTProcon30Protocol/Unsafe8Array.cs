@@ -27,23 +27,19 @@ namespace MCTProcon30Protocol
         public T Agent7;
         [Key(7)]
         public T Agent8;
-        [IgnoreMember]
-        public uint Count {
-            get; private set;
-        }
 
         [IgnoreMember]
         public unsafe T this[int index] {
             get {
 #if DEBUG
-                if (Count >= (uint)index) throw new IndexOutOfRangeException();
+                if ((uint)index >= 8) throw new IndexOutOfRangeException();
 #endif
                 T* ary = (T*)Unsafe.AsPointer(ref this);
                 return ary[index];
             }
             set {
 #if DEBUG
-                if (Count >= (uint)index) throw new IndexOutOfRangeException();
+                if ((uint)index >= 8) throw new IndexOutOfRangeException();
 #endif
                 T* ary = (T*)Unsafe.AsPointer(ref this);
                 ary[index] = value;
@@ -55,7 +51,6 @@ namespace MCTProcon30Protocol
             if ((uint)(agents.Count - 1) > 7) throw new ArgumentOutOfRangeException();
 #endif
             Unsafe8Array<T1> result = new Unsafe8Array<T1>();
-            result.Count = (uint)agents.Count;
             int i = 0;
             for (; i < agents.Count; ++i)
                 result[i] = agents[i];
@@ -68,7 +63,6 @@ namespace MCTProcon30Protocol
             if ((uint)(agents.Length - 1) > 7) throw new ArgumentOutOfRangeException();
 #endif
             Unsafe8Array<T1> result = new Unsafe8Array<T1>();
-            result.Count = (uint)agents.Length;
             int i = 0;
             for (; i < agents.Length; ++i)
                 result[i] = agents[i];
