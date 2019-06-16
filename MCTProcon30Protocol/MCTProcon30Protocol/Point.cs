@@ -90,15 +90,21 @@ namespace MCTProcon30Protocol
 
         public static Point operator +(Point x, VelocityPoint y)
         {
-            x.X = (uint)((int)x.X + y.X);
-            x.Y = (uint)((int)x.Y + y.Y);
+            unchecked
+            {
+                x.X = (byte)(x.X + y.X);
+                x.Y = (byte)(x.Y + y.Y);
+            }
             return x;
         }
 
         public static Point operator -(Point x, VelocityPoint y)
         {
-            x.X = (uint)((int)x.X - y.X);
-            x.Y = (uint)((int)x.Y - y.Y);
+            unchecked
+            {
+                x.X = (byte)(x.X - y.X);
+                x.Y = (byte)(x.Y - y.Y);
+            }
             return x;
         }
 
