@@ -70,7 +70,7 @@ namespace MCTProcon30Protocol
         public ColoredBoardSmallBigger(uint width = 1, uint height = 1)
         {
             if (width > 16 || height > BoardSize || (width == 0 && height == 0))
-                throw new ArgumentException("x and y are bad numbers.");
+                throw new ArgumentOutOfRangeException("both x and y is less than 12 and greater than 0 or equal to 0.");
             Width = width;
             Height = height;
 
@@ -119,61 +119,65 @@ namespace MCTProcon30Protocol
         }
     }
 
-    //public unsafe struct ColoredBoardNormalSmaller : ColoredBoard
-    //{
-    //    private const int BoardSize = 32;
+    public unsafe struct ColoredBoardNormalSmaller : ColoredBoard
+    {
+        internal const int BoardSize = 32;
 
-    //    private fixed uint board[BoardSize];
+        [Key(2)]
+        //DON'T USE!
+        internal fixed uint board[BoardSize];
 
-    //    public uint Width { get; private set; }
-    //    public uint Height { get; private set; }
+        [Key(0)]
+        public uint Width { get; private set; }
+        [Key(1)]
+        public uint Height { get; private set; }
 
-    //    public ColoredBoardNormalSmaller(uint width = 0, uint height = 0)
-    //    {
-    //        if (width > 32 || height > 32 || (width == 0 && height == 0))
-    //            throw new ArgumentException("x and y are bad numbers.");
-    //        Width = width;
-    //        Height = height;
+        public ColoredBoardNormalSmaller(uint width = 0, uint height = 0)
+        {
+            if (width > 32 || height > 32 || (width == 0 && height == 0))
+                throw new ArgumentOutOfRangeException("both x and y is less than 32 and greater than 0 or equal to 0.");
+            Width = width;
+            Height = height;
 
-    //        fixed (uint* ptr = board)
-    //        {
-    //            uint* itr = ptr;
-    //            for (int i = 0; i < BoardSize; ++i, ++itr)
-    //            {
-    //                *itr = 0;
-    //            }
-    //        }
-    //    }
+            fixed (uint* ptr = board)
+            {
+                uint* itr = ptr;
+                for (int i = 0; i < BoardSize; ++i, ++itr)
+                {
+                    *itr = 0;
+                }
+            }
+        }
 
-    //    public bool this[uint x, uint y] {
-    //        get {
-    //            if (x >= Width || y >= Height) throw new ArgumentOutOfRangeException();
+        public bool this[uint x, uint y] {
+            get {
+                if (x >= Width || y >= Height) throw new ArgumentOutOfRangeException();
 
-    //            bool result = false;
-    //            fixed (uint* ptr = board)
-    //            {
-    //                result = (*(ptr + y) & (1ul << (int)x)) != 0;
-    //            }
-    //            return result;
-    //        }
-    //        set {
-    //            if (x >= Width || y >= Height) throw new ArgumentOutOfRangeException();
+                bool result = false;
+                fixed (uint* ptr = board)
+                {
+                    result = (*(ptr + y) & (1ul << (int)x)) != 0;
+                }
+                return result;
+            }
+            set {
+                if (x >= Width || y >= Height) throw new ArgumentOutOfRangeException();
 
-    //            fixed (uint* ptr = board)
-    //            {
-    //                if (value)
-    //                    *(ptr + y) |= (1u << (int)x);
-    //                else
-    //                    *(ptr + y) &= ~(1u << (int)x);
-    //            }
-    //        }
-    //    }
+                fixed (uint* ptr = board)
+                {
+                    if (value)
+                        *(ptr + y) |= (1u << (int)x);
+                    else
+                        *(ptr + y) &= ~(1u << (int)x);
+                }
+            }
+        }
 
-    //    public bool this[Point p] {
-    //        get => this[p.X, p.Y];
-    //        set => this[p.X, p.Y] = value;
-    //    }
-    //}
+        public bool this[Point p] {
+            get => this[p.X, p.Y];
+            set => this[p.X, p.Y] = value;
+        }
+    }
 
     //public unsafe struct ColoredBoardNormal : ColoredBoard
     //{

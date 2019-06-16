@@ -17,7 +17,7 @@ namespace MCTProcon30Protocol
         static IPCManager()
         {
             MessagePack.Resolvers.CompositeResolver.RegisterAndSetAsDefault(
-                new MessagePack.Formatters.IMessagePackFormatter[] { new ColoredBoardFormatter() }, new[] { MessagePack.Resolvers.StandardResolver.Instance });
+                new MessagePack.Formatters.IMessagePackFormatter[] { new ColoredBoardSmallBiggerFormatter(), new ColoredBoardSmallBiggerFormatter() }, new[] { MessagePack.Resolvers.StandardResolver.Instance });
         }
 
         TcpListener listener;
