@@ -11,18 +11,28 @@ namespace MCTProcon30Protocol
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public unsafe struct Unsafe8Array<T> where T : unmanaged
     {
+        [Key(0)]
         public T Agent1;
+        [Key(1)]
         public T Agent2;
+        [Key(2)]
         public T Agent3;
+        [Key(3)]
         public T Agent4;
+        [Key(4)]
         public T Agent5;
+        [Key(5)]
         public T Agent6;
+        [Key(6)]
         public T Agent7;
+        [Key(7)]
         public T Agent8;
+        [IgnoreMember]
         public uint Count {
             get; private set;
         }
 
+        [IgnoreMember]
         public unsafe T this[int index] {
             get {
 #if DEBUG
