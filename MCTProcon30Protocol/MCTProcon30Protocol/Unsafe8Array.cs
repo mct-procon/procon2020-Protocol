@@ -68,5 +68,21 @@ namespace MCTProcon30Protocol
                 result[i] = agents[i];
             return result;
         }
+
+        public ulong LongGetHashCode()
+        {
+            int count = sizeof(T);
+            ulong succ = 0;
+            ulong* ary = (ulong*)Unsafe.AsPointer(ref this);
+            for (int i = 0; i < count; ++i)
+                unchecked { succ += *ary; ary++; }
+            return succ;
+        }
+
+        public override int GetHashCode()
+        {
+            ulong r = this.LongGetHashCode();
+            return unchecked((int)((uint)(r >> 32) ^ (uint)r));
+        }
     }
 }

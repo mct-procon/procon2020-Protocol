@@ -9,14 +9,11 @@ namespace MCTProcon30Protocol.Methods
     public class RebaseByUser
     {
         [Key(0)]
-        public Point Agent1 { get; set; }
-        [Key(1)]
-        public Point Agent2 { get; set; }
+        public Unsafe8Array<Point> Agents;
 
-        public RebaseByUser(Point agent1, Point agent2)
+        public RebaseByUser(in Unsafe8Array<Point> agents)
         {
-            Agent1 = agent1;
-            Agent2 = agent2;
+            Agents = agents;
         }
 
         // DO NOT ERASE

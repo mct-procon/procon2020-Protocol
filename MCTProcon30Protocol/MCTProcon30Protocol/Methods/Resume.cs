@@ -5,6 +5,7 @@ using System.Text;
 
 namespace MCTProcon30Protocol.Methods
 {
+    [Obsolete]
     [MessagePackObject]
     public class Resume
     {
@@ -32,7 +33,10 @@ namespace MCTProcon30Protocol.Methods
         [Key(7)]
         public int LimitationTime { get; set; }
 
-        public Resume(byte turn, byte currentTurn, int boardHeight, int boardWidth, sbyte[,] board, ColoredBoardSmallBigger meColoredBoard, ColoredBoardSmallBigger enemyColoredBoard)
+        [Key(8)]
+        public byte AgentsCount { get; set; }
+
+        public Resume(byte turn, byte currentTurn, int boardHeight, int boardWidth, sbyte[,] board, ColoredBoardSmallBigger meColoredBoard, ColoredBoardSmallBigger enemyColoredBoard, byte agentsCount)
         {
             Turns = turn;
             CurrentTurn = currentTurn;
@@ -41,6 +45,7 @@ namespace MCTProcon30Protocol.Methods
             Board = board;
             MeColoredBoard = meColoredBoard;
             EnemyColoredBoard = enemyColoredBoard;
+            AgentsCount = agentsCount;
         }
 
         // DO NOT ERASE
