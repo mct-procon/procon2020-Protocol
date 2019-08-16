@@ -35,17 +35,15 @@ namespace MCTProcon30Protocol.AIFramework
         public bool IsWriteBoard { get; set; } = false;
 
         public sbyte[,] ScoreBoard { get; set; }
-        public Point MyAgent1 { get; set; }
-        public Point MyAgent2 { get; set; }
+        public Unsafe8Array<Point> MyAgents { get; set; }
+        public Unsafe8Array<bool> IsAgentsMoved { get; set; }
+        public Unsafe8Array<Point> EnemyAgents { get; set; }
 
-        public bool IsAgent1Moved { get; set; }
-        public bool IsAgent2Moved { get; set; }
-
-        public Point EnemyAgent1 { get; set; }
-        public Point EnemyAgent2 { get; set; }
 
         public ColoredBoardSmallBigger MyBoard { get; set; }
         public ColoredBoardSmallBigger EnemyBoard { get; set; }
+
+        public int AgentsCount { get; set; }
 
         public int CurrentTurn { get; set; }
         public int TurnCount { get; set; }
@@ -93,29 +91,24 @@ namespace MCTProcon30Protocol.AIFramework
             Log("[IPC] Receive GameInit");
 
             ScoreBoard = init.Board;
-            MyAgent1 = init.MeAgent1;
-            MyAgent2 = init.MeAgent2;
-            EnemyAgent1 = init.EnemyAgent1;
-            EnemyAgent2 = init.EnemyAgent2;
+            MyAgents = init.MyAgents;
+            EnemyAgents = init.EnemyAgents;
             TurnCount = init.Turns;
-
+            AgentsCount = init.AgentsCount;
         }
 
         public void OnTurnStart(TurnStart turn)
         {
             MyBoard = turn.MeColoredBoard;
             EnemyBoard = turn.EnemyColoredBoard;
-            MyAgent1 = turn.MeAgent1;
-            MyAgent2 = turn.MeAgent2;
-            IsAgent1Moved = turn.IsAgent1Moved;
-            IsAgent2Moved = turn.IsAgent2Moved;
-            EnemyAgent1 = turn.EnemyAgent1;
-            EnemyAgent2 = turn.EnemyAgent2;
+            MyAgents = turn.MyAgents;
+            EnemyAgents = turn.EnemyAgents;
+            IsAgentsMoved = turn.IsAgentsMoved;
             CurrentTurn = turn.Turn;
             SendingFinished = false;
 
             Log("[IPC] Receive TurnStart turn = {0}", turn.Turn);
-            DumpBoard(turn.MeColoredBoard, turn.EnemyColoredBoard, MyAgent1, MyAgent1, EnemyAgent1, EnemyAgent2);
+            DumpBoard(turn.MeColoredBoard, turn.EnemyColoredBoard, AgentsCount, MyAgents, EnemyAgents);
 
             StartSolve();
             timer.Interval = CalculateTimerMiliSconds(turn.WaitMiliSeconds);
@@ -199,7 +192,7 @@ namespace MCTProcon30Protocol.AIFramework
             SendDecided();
         }
 
-        protected virtual void DumpBoard(in ColoredBoardSmallBigger MyBoard, in ColoredBoardSmallBigger EnemyBoard, Point Me1, Point Me2, Point Enemy1, Point Enemy2 )
+        protected virtual void DumpBoard(in ColoredBoardSmallBigger MyBoard, in ColoredBoardSmallBigger EnemyBoard, int AgentsCount, Unsafe8Array<Point> MyAgents, Unsafe8Array<Point> EnemyAgents )
         {
             if (!IsWriteBoard) return;
             lock (LogSyncRoot)
@@ -208,36 +201,37 @@ namespace MCTProcon30Protocol.AIFramework
                 {
                     for (uint x = 0; x < ScoreBoard.GetLength(0); ++x)
                     {
-                        if ((x == Me1.X && y == Me1.Y) || (x == Me2.X && y == Me2.Y))
+                        int pack = Point.Pack((byte)x, (byte)y);
+                        bool flag = false;
+                        Console.ForegroundColor = ConsoleColor.White;
+                        for (int i = 0; i < AgentsCount; ++i)
                         {
-                            Console.ForegroundColor = ConsoleColor.White;
-                            Console.BackgroundColor = ConsoleColor.Red;
+                            if(MyAgents[i].GetHashCode() == pack)
+                            {
+                                Console.BackgroundColor = ConsoleColor.Red;
+                                flag = true;
+                                break;
+                            }
+                            if (EnemyAgents[i].GetHashCode() == pack)
+                            {
+                                Console.BackgroundColor = ConsoleColor.Blue;
+                                flag = true;
+                                break;
+                            }
                         }
-                        else if ((x == Enemy1.X && y == Enemy1.Y) || (x == Enemy2.X && y == Enemy2.Y))
+                        if (!flag)
                         {
-                            Console.ForegroundColor = ConsoleColor.White;
-                            Console.BackgroundColor = ConsoleColor.Blue;
-                        }
-                        if (MyBoard[x, y])
-                        {
-                            Console.ForegroundColor = ConsoleColor.White;
-                            Console.BackgroundColor = ConsoleColor.DarkRed;
-                        }
-                        else if (EnemyBoard[x, y])
-                        {
-
-                            Console.ForegroundColor = ConsoleColor.White;
-                            Console.BackgroundColor = ConsoleColor.DarkBlue;
-                        }
-                        else if (((x + y) & 1) == 0)
-                        {
-                            Console.ForegroundColor = ConsoleColor.White;
-                            Console.BackgroundColor = ConsoleColor.Black;
-                        }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Black;
-                            Console.BackgroundColor = ConsoleColor.White;
+                            if (MyBoard[x, y])
+                                Console.BackgroundColor = ConsoleColor.DarkRed;
+                            else if (EnemyBoard[x, y])
+                                Console.BackgroundColor = ConsoleColor.DarkBlue;
+                            else if (((x + y) & 1) == 0)
+                                Console.BackgroundColor = ConsoleColor.Black;
+                            else
+                            {
+                                Console.ForegroundColor = ConsoleColor.Black;
+                                Console.BackgroundColor = ConsoleColor.White;
+                            }
                         }
                         string str = ScoreBoard[x, y].ToString();
                         if (str.Length != 3)

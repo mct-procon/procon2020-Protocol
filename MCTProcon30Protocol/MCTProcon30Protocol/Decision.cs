@@ -6,17 +6,26 @@ using System.Text;
 
 namespace MCTProcon30Protocol
 {
+    /// <summary>
+    /// A Structure for Decision.
+    /// </summary>
     [MessagePackObject]
     public class Decision
     {
         private Unsafe8Array<VelocityPoint> agents;
         
+        /// <summary>
+        /// Agents' mvoes
+        /// </summary>
         [Key(0)]
         public Unsafe8Array<VelocityPoint> Agents {
             get => agents;
             set => agents = value;
         }
 
+        /// <summary>
+        /// Board Score
+        /// </summary>
         [Key(1)]
         public int Score { get; set; }
 

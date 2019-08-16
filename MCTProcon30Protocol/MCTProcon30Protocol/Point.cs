@@ -32,6 +32,9 @@ namespace MCTProcon30Protocol
             this.Y = y;
         }
 
+        public static int Pack(byte x, byte y)
+            => x | (y << 8);
+
         public override int GetHashCode()
             => X | (Y << 8);
 
