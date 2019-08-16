@@ -25,10 +25,10 @@ namespace MCTProcon30Protocol.Methods
         public sbyte[,] Board { get; set; }
 
         [Key(5)]
-        public ColoredBoardSmallBigger MeColoredBoard { get; set; }
+        public ColoredBoardNormalSmaller MeColoredBoard { get; set; }
 
         [Key(6)]
-        public ColoredBoardSmallBigger EnemyColoredBoard { get; set; }
+        public ColoredBoardNormalSmaller EnemyColoredBoard { get; set; }
 
         [Key(7)]
         public int LimitationTime { get; set; }
@@ -36,7 +36,7 @@ namespace MCTProcon30Protocol.Methods
         [Key(8)]
         public byte AgentsCount { get; set; }
 
-        public Resume(byte turn, byte currentTurn, int boardHeight, int boardWidth, sbyte[,] board, ColoredBoardSmallBigger meColoredBoard, ColoredBoardSmallBigger enemyColoredBoard, byte agentsCount)
+        public Resume(byte turn, byte currentTurn, int boardHeight, int boardWidth, sbyte[,] board, ColoredBoardNormalSmaller meColoredBoard, ColoredBoardNormalSmaller enemyColoredBoard, byte agentsCount)
         {
             Turns = turn;
             CurrentTurn = currentTurn;

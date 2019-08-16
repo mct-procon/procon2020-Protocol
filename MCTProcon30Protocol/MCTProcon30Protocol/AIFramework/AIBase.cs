@@ -40,8 +40,8 @@ namespace MCTProcon30Protocol.AIFramework
         public Unsafe8Array<Point> EnemyAgents { get; set; }
 
 
-        public ColoredBoardSmallBigger MyBoard { get; set; }
-        public ColoredBoardSmallBigger EnemyBoard { get; set; }
+        public ColoredBoardNormalSmaller MyBoard { get; set; }
+        public ColoredBoardNormalSmaller EnemyBoard { get; set; }
 
         public int AgentsCount { get; set; }
 
@@ -192,7 +192,7 @@ namespace MCTProcon30Protocol.AIFramework
             SendDecided();
         }
 
-        protected virtual void DumpBoard(in ColoredBoardSmallBigger MyBoard, in ColoredBoardSmallBigger EnemyBoard, int AgentsCount, Unsafe8Array<Point> MyAgents, Unsafe8Array<Point> EnemyAgents )
+        protected virtual void DumpBoard(in ColoredBoardNormalSmaller MyBoard, in ColoredBoardNormalSmaller EnemyBoard, int AgentsCount, Unsafe8Array<Point> MyAgents, Unsafe8Array<Point> EnemyAgents )
         {
             if (!IsWriteBoard) return;
             lock (LogSyncRoot)
