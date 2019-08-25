@@ -84,5 +84,25 @@ namespace MCTProcon30Protocol
             ulong r = this.LongGetHashCode();
             return unchecked((int)((uint)(r >> 32) ^ (uint)r));
         }
+
+        public static unsafe bool Equals(Unsafe8Array<Point> x, Unsafe8Array<Point> y, int size)
+            => EqualsBase((ulong*)Unsafe.AsPointer(ref x), (ulong*)Unsafe.AsPointer(ref y), size);
+
+        public static unsafe bool Equals(Unsafe8Array<VelocityPoint> x, Unsafe8Array<VelocityPoint> y, int size)
+            => EqualsBase((ulong*)Unsafe.AsPointer(ref x), (ulong*)Unsafe.AsPointer(ref y), size);
+
+        private static unsafe bool EqualsBase(ulong* x, ulong* y, int size)
+        {
+            if (size > 4)
+            {
+                if (*x != *y) return false;
+                x++;
+                y++;
+                size -= 4;
+            }
+            ulong mask = ulong.MaxValue >> (size * (8 * 2));
+            if ((*x & mask) != (*y & mask)) return false;
+            return true;
+        }
     }
 }
