@@ -100,7 +100,7 @@ namespace MCTProcon30Protocol
                 y++;
                 size -= 4;
             }
-            ulong mask = ulong.MaxValue >> (size * (8 * 2));
+            ulong mask = ulong.MaxValue >> ((4-size) * (8 * 2));
             if ((*x & mask) != (*y & mask)) return false;
             return true;
         }

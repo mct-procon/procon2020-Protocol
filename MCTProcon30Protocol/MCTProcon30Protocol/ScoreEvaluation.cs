@@ -6,6 +6,24 @@ namespace MCTProcon30Protocol
 {
     public static class ScoreEvaluation
     {
+        public static int EvaluateGameScore(ColoredBoardNormalSmaller board, sbyte[,] score)
+        {
+            int result = 0;
+
+            for (uint x = 0; x < score.GetLength(0); ++x)
+                for (uint y = 0; y < score.GetLength(1); ++y)
+                    if (board[x,y])
+                        result += score[x, y];
+
+            BadSpaceFill(ref board, (byte)score.GetLength(0), (byte)score.GetLength(1));
+
+            for (uint x = 0; x < score.GetLength(0); ++x)
+                for (uint y = 0; y < score.GetLength(1); ++y)
+                    if (!board[x, y])
+                        result += Math.Abs(score[x, y]);
+            return result;
+        }
+
         public static int EvaluateFilledScore(in ColoredBoardNormalSmaller board, sbyte[,] score)
         {
             int result = 0;
