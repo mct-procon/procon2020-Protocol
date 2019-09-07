@@ -105,6 +105,6 @@ namespace MCTProcon30Protocol
             return true;
         }
 
-        public Unsafe8ArrayEnumerator<T> GetEnumerator(int Count) => new Unsafe8ArrayEnumerator<T>((IntPtr)Unsafe.AsPointer(ref this), Count);
+        public Unsafe8ArrayEnumerable<T> GetEnumerable(int Count) => new Unsafe8ArrayEnumerable<T>(this, Count);
     }
 }

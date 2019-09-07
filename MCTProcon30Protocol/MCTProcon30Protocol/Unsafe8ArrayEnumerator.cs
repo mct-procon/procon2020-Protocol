@@ -8,15 +8,15 @@ namespace MCTProcon30Protocol
 {
     public unsafe class Unsafe8ArrayEnumerator<T> : IEnumerator<T> where T : unmanaged
     {
-        public T Current => Unsafe.AsRef<Unsafe8Array<T>>((void *)parent)[currentIndex];
+        public T Current => parent[currentIndex];
 
-        object IEnumerator.Current => Unsafe.AsRef<Unsafe8Array<T>>((void*)parent)[currentIndex];
+        object IEnumerator.Current => parent[currentIndex];
 
-        private IntPtr parent;
+        private Unsafe8Array<T> parent;
         private int count;
         private int currentIndex;
 
-        internal Unsafe8ArrayEnumerator(IntPtr ary, int Count)
+        internal Unsafe8ArrayEnumerator(Unsafe8Array<T> ary, int Count)
         {
             parent = ary;
             count = Count;
