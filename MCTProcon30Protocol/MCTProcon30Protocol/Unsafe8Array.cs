@@ -104,5 +104,7 @@ namespace MCTProcon30Protocol
             if ((*x & mask) != (*y & mask)) return false;
             return true;
         }
+
+        public Unsafe8ArrayEnumerator<T> GetEnumerator(int Count) => new Unsafe8ArrayEnumerator<T>((IntPtr)Unsafe.AsPointer(ref this), Count);
     }
 }

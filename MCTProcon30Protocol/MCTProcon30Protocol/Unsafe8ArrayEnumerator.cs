@@ -16,12 +16,14 @@ namespace MCTProcon30Protocol
         private int count;
         private int currentIndex;
 
-        public Unsafe8ArrayEnumerator(IntPtr ary, int Count)
+        internal Unsafe8ArrayEnumerator(IntPtr ary, int Count)
         {
             parent = ary;
             count = Count;
             currentIndex = 0;
         }
+
+        private Unsafe8ArrayEnumerator() { }
 
         public void Dispose()
         {
