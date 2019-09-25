@@ -48,6 +48,8 @@ namespace MCTProcon30Protocol.AIFramework
         public int CurrentTurn { get; set; }
         public int TurnCount { get; set; }
 
+        public bool IsEnableTimer { get; set; } = true;
+
         private volatile bool SendingFinished = false;
 
         public object LogSyncRoot = new object();
@@ -111,8 +113,11 @@ namespace MCTProcon30Protocol.AIFramework
             DumpBoard(turn.MeColoredBoard, turn.EnemyColoredBoard, AgentsCount, MyAgents, EnemyAgents);
 
             StartSolve();
-            timer.Interval = CalculateTimerMiliSconds(turn.WaitMiliSeconds);
-            timer.Enabled = true;
+            if (IsEnableTimer)
+            {
+                timer.Interval = CalculateTimerMiliSconds(turn.WaitMiliSeconds);
+                timer.Enabled = true;
+            }
         }
 
         public void OnTurnEnd(TurnEnd turn)
