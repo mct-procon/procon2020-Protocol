@@ -17,6 +17,5 @@ namespace MCTProcon30Protocol.Methods
         Interrupt = 7,
         Resume = 8,
         RebaseByUser = 9,
-        DecidedEx = 10
     }
 }

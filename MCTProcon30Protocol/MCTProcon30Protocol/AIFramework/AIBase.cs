@@ -281,7 +281,7 @@ namespace MCTProcon30Protocol.AIFramework
             SendingFinished = true;
             if (SolverResult != null)
             {
-                ipc.Write<Methods.Decided>(DataKind.DecidedEx, SolverResultList);
+                ipc.Write<Methods.Decided>(DataKind.Decided, SolverResultList);
                 Log("[IPC] Decided Sended");
             }
             else
