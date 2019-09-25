@@ -20,7 +20,7 @@ namespace MCTProcon30Protocol
         {
             parent = ary;
             count = Count;
-            currentIndex = 0;
+            currentIndex = -1;
         }
 
         private Unsafe8ArrayEnumerator() { }
@@ -32,7 +32,7 @@ namespace MCTProcon30Protocol
         public bool MoveNext()
         {
             currentIndex++;
-            if (count >= currentIndex)
+            if (currentIndex >= count)
             {
                 currentIndex--;
                 return false;
@@ -42,7 +42,7 @@ namespace MCTProcon30Protocol
 
         public void Reset()
         {
-            currentIndex = 0;
+            currentIndex = -1;
         }
     }
 }
