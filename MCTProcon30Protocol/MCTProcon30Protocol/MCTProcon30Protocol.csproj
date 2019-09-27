@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netstandard2.1</TargetFramework>
     <AssemblyName>MCTProcon30Protocol</AssemblyName>
     <RootNamespace>MCTProcon30Protocol</RootNamespace>
     <LangVersion>7.3</LangVersion>
