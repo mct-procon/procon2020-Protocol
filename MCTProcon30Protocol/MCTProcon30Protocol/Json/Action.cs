@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using System.Text;
 
 namespace MCTProcon30Protocol.Json
@@ -15,15 +15,16 @@ namespace MCTProcon30Protocol.Json
         Unknown = 0, Fail, Coflict, Success
     }
 
+    [JsonObject]
     public class Action
     {
-        [DataMember(Name = "agentID")]
+        [JsonProperty("agentID")]
         public int AgentID { get; set; }
 
-        [DataMember(Name ="type")]
+        [JsonProperty("type")]
         public string __type { get; set; }
 
-        [IgnoreDataMember]
+        [JsonIgnore]
         public ActionType Type => __type switch
         {
             "move" => ActionType.Move,
@@ -32,19 +33,19 @@ namespace MCTProcon30Protocol.Json
             _ => ActionType.Unknown
         };
 
-        [DataMember(Name = "dx")]
+        [JsonProperty("dx")]
         public int Dx { get; set; }
 
-        [DataMember(Name ="dy")]
+        [JsonProperty("dy")]
         public int Dy { get; set; }
 
-        [DataMember(Name ="turn")]
+        [JsonProperty("turn")]
         public int Turn { get; set; }
 
-        [DataMember(Name = "apply")]
+        [JsonProperty("apply")]
         public int __apply { get; set; }
 
-        [IgnoreDataMember]
+        [JsonIgnore]
         public Appliment Apply => __apply switch
         {
             -1 => Appliment.Fail,

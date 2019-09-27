@@ -1,28 +1,29 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using System.Text;
 
 namespace MCTProcon30Protocol.Json
 {
+    [JsonObject]
     public class Match
     {
-        [DataMember(Name = "id")]
+        [JsonProperty("id")]
         public int Id { get; set; }
 
-        [DataMember(Name = "intervalMillis")]
+        [JsonProperty("intervalMillis")]
         public int IntervalMilliseconds { get; set; }
 
-        [DataMember(Name = "matchTo")]
+        [JsonProperty("matchTo")]
         public string MatchTo { get; set; }
 
-        [DataMember(Name = "teamID")]
+        [JsonProperty("teamID")]
         public int TeamId { get; set; }
 
-        [DataMember(Name = "turnMills")]
+        [JsonProperty("turnMills")]
         public int TurnMilliseconds { get; set; }
 
-        [DataMember(Name = "turns")]
+        [JsonProperty("turns")]
         public int Turns { get; set; }
     }
 }

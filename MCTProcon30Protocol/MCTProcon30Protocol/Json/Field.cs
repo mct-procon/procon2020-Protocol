@@ -1,34 +1,35 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using System.Text;
 
 namespace MCTProcon30Protocol.Json
 {
+    [JsonObject]
     public class Field
     {
-        [DataMember(Name = "width")]
+        [JsonProperty("width")]
         public int Width { get; set; }
 
-        [DataMember(Name = "height")]
+        [JsonProperty("height")]
         public int Height { get; set; }
 
-        [DataMember(Name = "points")]
+        [JsonProperty("points")]
         public int[,] Point { get; set; }
 
-        [DataMember(Name = "startedAtUnixTime")]
+        [JsonProperty("startedAtUnixTime")]
         public int StartedAtUnixTime { get; set; }
 
-        [DataMember(Name = "turn")]
+        [JsonProperty("turn")]
         public int Turn { get; set; }
         
-        [DataMember(Name = "tiled")]
+        [JsonProperty("tiled")]
         public int[,] Tiled { get; set; }
 
-        [DataMember(Name = "teams")]
+        [JsonProperty("teams")]
         public Team[] Teams { get; set; }
 
-        [DataMember(Name = "actions")]
+        [JsonProperty("actions")]
         public Action[] Actions { get; set; }
     }
 }

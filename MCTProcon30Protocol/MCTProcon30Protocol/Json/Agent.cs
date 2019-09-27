@@ -1,19 +1,20 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using System.Text;
 
 namespace MCTProcon30Protocol.Json
 {
+    [JsonObject]
     public class Agent
     {
-        [DataMember(Name = "agentID")]
+        [JsonProperty("agentID")]
         public int AgentID { get; set; }
 
-        [DataMember(Name = "x")]
+        [JsonProperty("x")]
         public int X { get; set; }
 
-        [DataMember(Name = "y")]
+        [JsonProperty("y")]
         public int Y { get; set; }
     }
 }

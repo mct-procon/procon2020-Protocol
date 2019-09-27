@@ -1,22 +1,23 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using System.Text;
 
 namespace MCTProcon30Protocol.Json
 {
+    [JsonObject]
     public class Team
     {
-        [DataMember(Name = "teamID")]
+        [JsonProperty("teamID")]
         public int TeamID { get; set; }
 
-        [DataMember(Name = "agents")]
+        [JsonProperty("agents")]
         public Agent[] Agents { get; set; }
 
-        [DataMember(Name ="tilePoint")]
+        [JsonProperty("tilePoint")]
         public int TilePoint { get; set; }
 
-        [DataMember(Name = "areaPoint")]
+        [JsonProperty("areaPoint")]
         public int AreaPoint { get; set; }
     }
 }
