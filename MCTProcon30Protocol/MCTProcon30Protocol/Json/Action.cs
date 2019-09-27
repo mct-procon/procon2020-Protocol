@@ -24,16 +24,13 @@ namespace MCTProcon30Protocol.Json
         public string __type { get; set; }
 
         [IgnoreDataMember]
-        public ActionType Type {
-            get {
-                switch (__type) {
-                    case "move": return ActionType.Move;
-                    case "remove": return ActionType.Remove;
-                    case "stay": return ActionType.Stay;
-                    default: return ActionType.Unknown;
-                }
-            }
-        }
+        public ActionType Type => __type switch
+        {
+            "move" => ActionType.Move,
+            "remove" => ActionType.Remove,
+            "stay" => ActionType.Stay,
+            _ => ActionType.Unknown
+        };
 
         [DataMember(Name = "dx")]
         public int Dx { get; set; }
@@ -48,16 +45,12 @@ namespace MCTProcon30Protocol.Json
         public int __apply { get; set; }
 
         [IgnoreDataMember]
-        public Appliment Apply {
-            get {
-                switch (__apply)
-                {
-                    case -1: return Appliment.Fail;
-                    case 0: return Appliment.Coflict;
-                    case 1: return Appliment.Success;
-                    default: return Appliment.Unknown;
-                }
-            }
-        }
+        public Appliment Apply => __apply switch
+        {
+            -1 => Appliment.Fail,
+            0 => Appliment.Coflict,
+            1 => Appliment.Success,
+            _ => Appliment.Unknown,
+        };
     }
 }
