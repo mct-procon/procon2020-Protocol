@@ -36,7 +36,13 @@ namespace MCTProcon30Protocol.Methods
         [Key(8)]
         public byte AgentsCount { get; set; }
 
-        public Resume(byte turn, byte currentTurn, int boardHeight, int boardWidth, sbyte[,] board, ColoredBoardNormalSmaller meColoredBoard, ColoredBoardNormalSmaller enemyColoredBoard, byte agentsCount)
+        [Key(9)]
+        public ColoredBoardNormalSmaller MeSurroundedBoard { get; set; }
+
+        [Key(9)]
+        public ColoredBoardNormalSmaller EnemySurroundedBoard { get; set; }
+
+        public Resume(byte turn, byte currentTurn, int boardHeight, int boardWidth, sbyte[,] board, ColoredBoardNormalSmaller meColoredBoard, ColoredBoardNormalSmaller enemyColoredBoard, byte agentsCount, ColoredBoardNormalSmaller meSurroundedBoard, ColoredBoardNormalSmaller enemySurroundedBoard)
         {
             Turns = turn;
             CurrentTurn = currentTurn;
@@ -46,6 +52,8 @@ namespace MCTProcon30Protocol.Methods
             MeColoredBoard = meColoredBoard;
             EnemyColoredBoard = enemyColoredBoard;
             AgentsCount = agentsCount;
+            MeSurroundedBoard = meSurroundedBoard;
+            EnemySurroundedBoard = enemySurroundedBoard;
         }
 
         // DO NOT ERASE

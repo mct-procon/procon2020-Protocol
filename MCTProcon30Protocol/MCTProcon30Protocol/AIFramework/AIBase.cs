@@ -42,7 +42,8 @@ namespace MCTProcon30Protocol.AIFramework
 
         public ColoredBoardNormalSmaller MyBoard { get; set; }
         public ColoredBoardNormalSmaller EnemyBoard { get; set; }
-
+        public ColoredBoardNormalSmaller MyPosisonBoard { get; set; }
+        public ColoredBoardNormalSmaller EnemyPosisonBoard { get; set; }
         public int AgentsCount { get; set; }
 
         public int CurrentTurn { get; set; }
@@ -107,10 +108,12 @@ namespace MCTProcon30Protocol.AIFramework
             EnemyAgents = turn.EnemyAgents;
             IsAgentsMoved = turn.IsAgentsMoved;
             CurrentTurn = turn.Turn;
+            MyPosisonBoard = turn.MeSurroundedBoard;
+            EnemyPosisonBoard = turn.EnemySurroundedBoard;
             SendingFinished = false;
 
             Log("[IPC] Receive TurnStart turn = {0}", turn.Turn);
-            DumpBoard(turn.MeColoredBoard, turn.EnemyColoredBoard, AgentsCount, MyAgents, EnemyAgents);
+            DumpBoard(turn.MeColoredBoard, turn.EnemyColoredBoard, turn.MeSurroundedBoard, turn.EnemySurroundedBoard, AgentsCount, MyAgents, EnemyAgents);
 
             StartSolve();
             if (IsEnableTimer)
@@ -197,7 +200,7 @@ namespace MCTProcon30Protocol.AIFramework
             SendDecided();
         }
 
-        protected virtual void DumpBoard(in ColoredBoardNormalSmaller MyBoard, in ColoredBoardNormalSmaller EnemyBoard, int AgentsCount, Unsafe8Array<Point> MyAgents, Unsafe8Array<Point> EnemyAgents )
+        protected virtual void DumpBoard(in ColoredBoardNormalSmaller MyBoard, in ColoredBoardNormalSmaller EnemyBoard, in ColoredBoardNormalSmaller MyPosisonBoard, in ColoredBoardNormalSmaller EnemyPosisonBoard, int AgentsCount, Unsafe8Array<Point> MyAgents, Unsafe8Array<Point> EnemyAgents )
         {
             if (!IsWriteBoard) return;
             lock (LogSyncRoot)
@@ -230,6 +233,10 @@ namespace MCTProcon30Protocol.AIFramework
                                 Console.BackgroundColor = ConsoleColor.DarkRed;
                             else if (EnemyBoard[x, y])
                                 Console.BackgroundColor = ConsoleColor.DarkBlue;
+                            else if (MyPosisonBoard[x, y])
+                                Console.BackgroundColor = ConsoleColor.Red;
+                            else if (EnemyPosisonBoard[x, y])
+                                Console.BackgroundColor = ConsoleColor.Blue;
                             else if (((x + y) & 1) == 0)
                                 Console.BackgroundColor = ConsoleColor.Black;
                             else
