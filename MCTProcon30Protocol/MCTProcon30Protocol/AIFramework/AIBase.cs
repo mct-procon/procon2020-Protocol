@@ -234,9 +234,9 @@ namespace MCTProcon30Protocol.AIFramework
                             else if (EnemyBoard[x, y])
                                 Console.BackgroundColor = ConsoleColor.DarkBlue;
                             else if (MyPosisonBoard[x, y])
-                                Console.BackgroundColor = ConsoleColor.Red;
+                                Console.BackgroundColor = ConsoleColor.Magenta;
                             else if (EnemyPosisonBoard[x, y])
-                                Console.BackgroundColor = ConsoleColor.Blue;
+                                Console.BackgroundColor = ConsoleColor.Cyan;
                             else if (((x + y) & 1) == 0)
                                 Console.BackgroundColor = ConsoleColor.Black;
                             else

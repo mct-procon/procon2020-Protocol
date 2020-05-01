@@ -39,7 +39,7 @@ namespace MCTProcon30Protocol.Methods
         [Key(9)]
         public ColoredBoardNormalSmaller MeSurroundedBoard { get; set; }
 
-        [Key(9)]
+        [Key(10)]
         public ColoredBoardNormalSmaller EnemySurroundedBoard { get; set; }
 
         public Resume(byte turn, byte currentTurn, int boardHeight, int boardWidth, sbyte[,] board, ColoredBoardNormalSmaller meColoredBoard, ColoredBoardNormalSmaller enemyColoredBoard, byte agentsCount, ColoredBoardNormalSmaller meSurroundedBoard, ColoredBoardNormalSmaller enemySurroundedBoard)
