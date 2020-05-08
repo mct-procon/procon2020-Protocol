@@ -27,19 +27,35 @@ namespace MCTProcon30Protocol
         public T Agent7;
         [Key(7)]
         public T Agent8;
+        [Key(8)]
+        public T Agent9;
+        [Key(9)]
+        public T Agent10;
+        [Key(10)]
+        public T Agent11;
+        [Key(11)]
+        public T Agent12;
+        [Key(12)]
+        public T Agent13;
+        [Key(13)]
+        public T Agent14;
+        [Key(14)]
+        public T Agent15;
+        [Key(15)]
+        public T Agent16;
 
         [IgnoreMember]
         public unsafe T this[int index] {
             get {
 #if DEBUG
-                if ((uint)index >= 8) throw new IndexOutOfRangeException();
+                if ((uint)index >= 16) throw new IndexOutOfRangeException();
 #endif
                 T* ary = (T*)Unsafe.AsPointer(ref this);
                 return ary[index];
             }
             set {
 #if DEBUG
-                if ((uint)index >= 8) throw new IndexOutOfRangeException();
+                if ((uint)index >= 16) throw new IndexOutOfRangeException();
 #endif
                 T* ary = (T*)Unsafe.AsPointer(ref this);
                 ary[index] = value;
@@ -48,7 +64,7 @@ namespace MCTProcon30Protocol
 
         public static Unsafe8Array<T1> Create<T1>(IReadOnlyList<T1> agents) where T1 : unmanaged {
 #if DEBUG
-            if ((uint)(agents.Count - 1) > 7) throw new ArgumentOutOfRangeException();
+            if ((uint)(agents.Count - 1) > 15) throw new ArgumentOutOfRangeException();
 #endif
             Unsafe8Array<T1> result = new Unsafe8Array<T1>();
             int i = 0;
@@ -60,7 +76,7 @@ namespace MCTProcon30Protocol
         public static Unsafe8Array<T1> Create<T1>(params T1[] agents) where T1 : unmanaged
         {
 #if DEBUG
-            if ((uint)(agents.Length - 1) > 7) throw new ArgumentOutOfRangeException();
+            if ((uint)(agents.Length - 1) > 15) throw new ArgumentOutOfRangeException();
 #endif
             Unsafe8Array<T1> result = new Unsafe8Array<T1>();
             int i = 0;
