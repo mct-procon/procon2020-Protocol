@@ -67,7 +67,9 @@ namespace MCTProcon30Protocol.AIFramework
 
         public virtual void StartSync(int port, bool isWriteLog = false, bool isWriteBoard = false)
         {
+#pragma warning disable CS4014
             Start(port, isWriteLog, isWriteBoard);
+#pragma warning restore CS4014
             SynchronizeStopper.Wait();
         }
         public virtual async Task Start(int port, bool isWriteLog = false, bool isWriteBoard = false)

@@ -45,9 +45,7 @@ namespace MCTProcon30Protocol
             Decision other = obj as Decision;
             if (other is null) return false;
             if (other.GetHashCode() != this.GetHashCode()) return false;
-            long* a = (long*)Unsafe.AsPointer(ref agents);
-            long* b = (long*)Unsafe.AsPointer(ref other.agents);
-            return (a[0] == b[0]) && (a[1] == b[1]);
+            return Unsafe8Array<VelocityPoint>.Equals(this.agents, other.agents, 16);
         }
 
         public override unsafe int GetHashCode()
@@ -57,29 +55,25 @@ namespace MCTProcon30Protocol
         }
 
         /// <summary>
-        /// Compare Equality. NOTICE: This doesn't compare Score.
+        /// Compare Equality. <strong>NOTICE: This doesn't compare Score.</strong>
         /// </summary>
         public static unsafe bool operator ==(Decision x, Decision y)
         {
             if ((x is null) && (y is null)) return true;
             if (x is null) return false;
             if (y is null) return false;
-            long* a = (long*)Unsafe.AsPointer(ref x.agents);
-            long* b = (long*)Unsafe.AsPointer(ref y.agents);
-            return (a[0] == b[0]) && (a[1] == b[1]);
+            return Unsafe8Array<VelocityPoint>.Equals(x.agents, y.agents, 16);
         }
 
         /// <summary>
-        /// Compare Equality. NOTICE: This doesn't compare Score.
+        /// Compare Equality. <strong>NOTICE: This doesn't compare Score.</strong>
         /// </summary>
         public static unsafe bool operator !=(Decision x, Decision y)
         {
             if ((x is null) && (y is null)) return false;
             if (x is null) return true;
             if (y is null) return true;
-            long* a = (long*)Unsafe.AsPointer(ref x.agents);
-            long* b = (long*)Unsafe.AsPointer(ref y.agents);
-            return (a[0] != b[0]) || (a[1] != b[1]);
+            return !Unsafe8Array<VelocityPoint>.Equals(x.agents, y.agents, 16);
         }
 
         public override string ToString() => $"Agent1 = {agents.Agent1}, Agent2 = {agents.Agent2}, Agent3 = {agents.Agent3}, Agent4 = {agents.Agent4}, Agent5 = {agents.Agent5}, Agent6 = {agents.Agent6}, Agent7 = {agents.Agent7}, Agent8 = {agents.Agent8}, Score = {Score}";
