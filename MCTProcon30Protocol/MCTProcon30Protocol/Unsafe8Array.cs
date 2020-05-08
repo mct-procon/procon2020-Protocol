@@ -107,9 +107,9 @@ namespace MCTProcon30Protocol
         public static unsafe bool Equals(Unsafe8Array<VelocityPoint> x, Unsafe8Array<VelocityPoint> y, int size)
             => EqualsBase((ulong*)Unsafe.AsPointer(ref x), (ulong*)Unsafe.AsPointer(ref y), size);
 
-        private static unsafe bool EqualsBase(ulong* x, ulong* y, int size)
+        public static unsafe bool EqualsBase(ulong* x, ulong* y, int size)
         {
-            if (size > 4)
+            while (size > 4)
             {
                 if (*x != *y) return false;
                 x++;
