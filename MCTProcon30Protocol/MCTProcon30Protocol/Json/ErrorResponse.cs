@@ -10,5 +10,8 @@ namespace MCTProcon30Protocol.Json
     {
         [JsonProperty("status")]
         public string Status { get; set; }
+
+        [JsonProperty("startAt")]
+        public Nullable<DateTime> StartAt { get; set; }
     }
 }
