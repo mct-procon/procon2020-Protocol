@@ -228,6 +228,7 @@ namespace MCTProcon30Protocol
             }
             catch (IOException ex)
             {
+                Console.WriteLine(ex);
                 System.Diagnostics.Debugger.Break();
             }
         } 
