@@ -35,7 +35,13 @@ namespace MCTProcon30Protocol.Methods
         [Key(9)]
         public ColoredBoardNormalSmaller EnemySurroundedBoard { get; set; }
 
-        public TurnStart(byte turn, int waitMiliSecs, in Unsafe16Array<Point> myAgents, in Unsafe16Array<Point> enemyAgents, in ColoredBoardNormalSmaller myColoredBoard, in ColoredBoardNormalSmaller enemyColoredBoard, in Unsafe16Array<bool> isAgentsMoved, in ColoredBoardNormalSmaller mySurroundedBoard, in ColoredBoardNormalSmaller enemySurroundedBoard)
+        [Key(10)]
+        public byte MyAgentsCount { get; set; }
+
+        [Key(11)]
+        public byte EnemyAgentsCount { get; set; }
+
+        public TurnStart(byte turn, int waitMiliSecs, in Unsafe16Array<Point> myAgents, in Unsafe16Array<Point> enemyAgents, in ColoredBoardNormalSmaller myColoredBoard, in ColoredBoardNormalSmaller enemyColoredBoard, in Unsafe16Array<bool> isAgentsMoved, in ColoredBoardNormalSmaller mySurroundedBoard, in ColoredBoardNormalSmaller enemySurroundedBoard, byte myAgentsCount, byte enemyAgentsCount)
         {
             Turn = turn;
             WaitMiliSeconds = waitMiliSecs;
@@ -46,6 +52,8 @@ namespace MCTProcon30Protocol.Methods
             IsAgentsMoved = isAgentsMoved;
             MySurroundedBoard = mySurroundedBoard; 
             EnemySurroundedBoard = enemySurroundedBoard;
+            MyAgentsCount = myAgentsCount;
+            EnemyAgentsCount = enemyAgentsCount;
         }
 
         // DO NOT ERASE

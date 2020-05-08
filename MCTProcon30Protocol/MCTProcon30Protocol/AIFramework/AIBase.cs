@@ -39,6 +39,10 @@ namespace MCTProcon30Protocol.AIFramework
         public Unsafe16Array<bool> IsAgentsMoved { get; set; }
         public Unsafe16Array<Point> EnemyAgents { get; set; }
 
+        public byte MyAgentsCount { get; set; }
+        public byte EnemyAgentsCount { get; set; }
+
+
 
         public ColoredBoardNormalSmaller MyBoard { get; set; }
         public ColoredBoardNormalSmaller EnemyBoard { get; set; }
@@ -112,6 +116,8 @@ namespace MCTProcon30Protocol.AIFramework
             CurrentTurn = turn.Turn;
             MySurroundedBoard = turn.MySurroundedBoard;
             EnemySurroundedBoard = turn.EnemySurroundedBoard;
+            MyAgentsCount = turn.MyAgentsCount;
+            EnemyAgentsCount = turn.EnemyAgentsCount;
             SendingFinished = false;
 
             Log("[IPC] Receive TurnStart turn = {0}", turn.Turn);
