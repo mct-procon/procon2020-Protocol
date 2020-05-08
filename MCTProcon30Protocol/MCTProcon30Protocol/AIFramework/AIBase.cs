@@ -35,9 +35,9 @@ namespace MCTProcon30Protocol.AIFramework
         public bool IsWriteBoard { get; set; } = false;
 
         public sbyte[,] ScoreBoard { get; set; }
-        public Unsafe8Array<Point> MyAgents { get; set; }
-        public Unsafe8Array<bool> IsAgentsMoved { get; set; }
-        public Unsafe8Array<Point> EnemyAgents { get; set; }
+        public Unsafe16Array<Point> MyAgents { get; set; }
+        public Unsafe16Array<bool> IsAgentsMoved { get; set; }
+        public Unsafe16Array<Point> EnemyAgents { get; set; }
 
 
         public ColoredBoardNormalSmaller MyBoard { get; set; }
@@ -202,7 +202,7 @@ namespace MCTProcon30Protocol.AIFramework
             SendDecided();
         }
 
-        protected virtual void DumpBoard(in ColoredBoardNormalSmaller MyBoard, in ColoredBoardNormalSmaller EnemyBoard, in ColoredBoardNormalSmaller MyPosisonBoard, in ColoredBoardNormalSmaller EnemyPosisonBoard, int AgentsCount, Unsafe8Array<Point> MyAgents, Unsafe8Array<Point> EnemyAgents )
+        protected virtual void DumpBoard(in ColoredBoardNormalSmaller MyBoard, in ColoredBoardNormalSmaller EnemyBoard, in ColoredBoardNormalSmaller MyPosisonBoard, in ColoredBoardNormalSmaller EnemyPosisonBoard, int AgentsCount, Unsafe16Array<Point> MyAgents, Unsafe16Array<Point> EnemyAgents )
         {
             if (!IsWriteBoard) return;
             lock (LogSyncRoot)

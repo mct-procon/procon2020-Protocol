@@ -5,12 +5,12 @@ using Xunit;
 
 namespace MCTProcon30Protocol.Test
 {
-    public class Unsafe8ArrayTests
+    public class Unsafe16ArrayTests
     {
         [Fact]
         public void PutAndGetPointTest()
         {
-            Unsafe8Array<Point> x = new Unsafe8Array<Point>();
+            Unsafe16Array<Point> x = new Unsafe16Array<Point>();
             x[0] = new Point(1, 2);
             x[1] = new Point(3, 4);
             x[2] = new Point(5, 6);
@@ -32,7 +32,7 @@ namespace MCTProcon30Protocol.Test
         [Fact]
         public void PutAndGetVelocityPointTest()
         {
-            Unsafe8Array<VelocityPoint> x = new Unsafe8Array<VelocityPoint>();
+            Unsafe16Array<VelocityPoint> x = new Unsafe16Array<VelocityPoint>();
             x[0] = new VelocityPoint(1, 2);
             x[1] = new VelocityPoint(3, 4);
             x[2] = new VelocityPoint(5, 6);
@@ -54,24 +54,24 @@ namespace MCTProcon30Protocol.Test
         [Fact]
         public void EqualPoint3Test()
         {
-            Unsafe8Array<Point> x = Unsafe8Array<Point>.Create(new Point[]{ new Point(0,1), new Point(2,3), new Point(4,5), new Point(6, 7)});
-            Unsafe8Array<Point> y = Unsafe8Array<Point>.Create(new Point[]{ new Point(0,1), new Point(2,3), new Point(4,5), new Point(8, 9)});
-            Assert.True(Unsafe8Array<Point>.Equals(x, y, 3));
+            Unsafe16Array<Point> x = Unsafe16Array<Point>.Create(new Point[]{ new Point(0,1), new Point(2,3), new Point(4,5), new Point(6, 7)});
+            Unsafe16Array<Point> y = Unsafe16Array<Point>.Create(new Point[]{ new Point(0,1), new Point(2,3), new Point(4,5), new Point(8, 9)});
+            Assert.True(Unsafe16Array<Point>.Equals(x, y, 3));
             y[2] = new Point(10, 11);
-            Assert.False(Unsafe8Array<Point>.Equals(x, y, 3));
+            Assert.False(Unsafe16Array<Point>.Equals(x, y, 3));
         }
 
         [Fact]
         public void EqualPoint5Test()
         {
-            Unsafe8Array<Point> x = Unsafe8Array<Point>.Create(new Point[] { new Point(0, 1), new Point(2, 3), new Point(4, 5), new Point(6, 7), new Point(8, 9), new Point(10, 11)});
-            Unsafe8Array<Point> y = Unsafe8Array<Point>.Create(new Point[] { new Point(0, 1), new Point(2, 3), new Point(4, 5), new Point(6, 7), new Point(8, 9), new Point(12, 13)});
-            Assert.True(Unsafe8Array<Point>.Equals(x, y, 5));
+            Unsafe16Array<Point> x = Unsafe16Array<Point>.Create(new Point[] { new Point(0, 1), new Point(2, 3), new Point(4, 5), new Point(6, 7), new Point(8, 9), new Point(10, 11)});
+            Unsafe16Array<Point> y = Unsafe16Array<Point>.Create(new Point[] { new Point(0, 1), new Point(2, 3), new Point(4, 5), new Point(6, 7), new Point(8, 9), new Point(12, 13)});
+            Assert.True(Unsafe16Array<Point>.Equals(x, y, 5));
             y[2] = new Point(10, 11);
-            Assert.False(Unsafe8Array<Point>.Equals(x, y, 5));
+            Assert.False(Unsafe16Array<Point>.Equals(x, y, 5));
             y[2] = new Point(4, 5);
             y[4] = new Point(4, 5);
-            Assert.False(Unsafe8Array<Point>.Equals(x, y, 5));
+            Assert.False(Unsafe16Array<Point>.Equals(x, y, 5));
         }
     }
 }

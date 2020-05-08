@@ -9,7 +9,7 @@ namespace MCTProcon30Protocol
 {
     [MessagePackObject]
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public unsafe struct Unsafe8Array<T> where T : unmanaged
+    public unsafe struct Unsafe16Array<T> where T : unmanaged
     {
         [Key(0)]
         public T Agent1;
@@ -62,23 +62,23 @@ namespace MCTProcon30Protocol
             }
         }
 
-        public static Unsafe8Array<T1> Create<T1>(IReadOnlyList<T1> agents) where T1 : unmanaged {
+        public static Unsafe16Array<T1> Create<T1>(IReadOnlyList<T1> agents) where T1 : unmanaged {
 #if DEBUG
             if ((uint)(agents.Count - 1) > 15) throw new ArgumentOutOfRangeException();
 #endif
-            Unsafe8Array<T1> result = new Unsafe8Array<T1>();
+            Unsafe16Array<T1> result = new Unsafe16Array<T1>();
             int i = 0;
             for (; i < agents.Count; ++i)
                 result[i] = agents[i];
             return result;
         }
 
-        public static Unsafe8Array<T1> Create<T1>(params T1[] agents) where T1 : unmanaged
+        public static Unsafe16Array<T1> Create<T1>(params T1[] agents) where T1 : unmanaged
         {
 #if DEBUG
             if ((uint)(agents.Length - 1) > 15) throw new ArgumentOutOfRangeException();
 #endif
-            Unsafe8Array<T1> result = new Unsafe8Array<T1>();
+            Unsafe16Array<T1> result = new Unsafe16Array<T1>();
             int i = 0;
             for (; i < agents.Length; ++i)
                 result[i] = agents[i];
@@ -101,10 +101,10 @@ namespace MCTProcon30Protocol
             return unchecked((int)((uint)(r >> 32) ^ (uint)r));
         }
 
-        public static unsafe bool Equals(Unsafe8Array<Point> x, Unsafe8Array<Point> y, int size)
+        public static unsafe bool Equals(Unsafe16Array<Point> x, Unsafe16Array<Point> y, int size)
             => EqualsBase((ulong*)Unsafe.AsPointer(ref x), (ulong*)Unsafe.AsPointer(ref y), size);
 
-        public static unsafe bool Equals(Unsafe8Array<VelocityPoint> x, Unsafe8Array<VelocityPoint> y, int size)
+        public static unsafe bool Equals(Unsafe16Array<VelocityPoint> x, Unsafe16Array<VelocityPoint> y, int size)
             => EqualsBase((ulong*)Unsafe.AsPointer(ref x), (ulong*)Unsafe.AsPointer(ref y), size);
 
         public static unsafe bool EqualsBase(ulong* x, ulong* y, int size)
@@ -121,6 +121,6 @@ namespace MCTProcon30Protocol
             return true;
         }
 
-        public Unsafe8ArrayEnumerable<T> GetEnumerable(int Count) => new Unsafe8ArrayEnumerable<T>(this, Count);
+        public Unsafe16ArrayEnumerable<T> GetEnumerable(int Count) => new Unsafe16ArrayEnumerable<T>(this, Count);
     }
 }

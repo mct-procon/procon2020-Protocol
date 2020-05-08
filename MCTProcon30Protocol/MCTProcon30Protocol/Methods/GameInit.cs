@@ -21,15 +21,15 @@ namespace MCTProcon30Protocol.Methods
         public byte AgentsCount { get; set; }
 
         [Key(4)]
-        public Unsafe8Array<Point> MyAgents { get; set; }
+        public Unsafe16Array<Point> MyAgents { get; set; }
 
         [Key(5)]
-        public Unsafe8Array<Point> EnemyAgents { get; set; }
+        public Unsafe16Array<Point> EnemyAgents { get; set; }
 
         [Key(6)]
         public byte Turns { get; set; }
 
-        public GameInit(byte height, byte width, sbyte[,] board, byte agentsCount, in Unsafe8Array<Point> myAgents, in Unsafe8Array<Point> enemyAgents, byte turns)
+        public GameInit(byte height, byte width, sbyte[,] board, byte agentsCount, in Unsafe16Array<Point> myAgents, in Unsafe16Array<Point> enemyAgents, byte turns)
         {
             BoardHeight = height;
             BoardWidth = width;

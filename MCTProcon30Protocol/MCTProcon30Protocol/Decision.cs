@@ -12,13 +12,13 @@ namespace MCTProcon30Protocol
     [MessagePackObject]
     public class Decision
     {
-        private Unsafe8Array<VelocityPoint> agents;
+        private Unsafe16Array<VelocityPoint> agents;
         
         /// <summary>
         /// Agents' mvoes
         /// </summary>
         [Key(0)]
-        public Unsafe8Array<VelocityPoint> Agents {
+        public Unsafe16Array<VelocityPoint> Agents {
             get => agents;
             set => agents = value;
         }
@@ -29,13 +29,13 @@ namespace MCTProcon30Protocol
         [Key(1)]
         public int Score { get; set; }
 
-        public Decision(in Unsafe8Array<VelocityPoint> agents, int score)
+        public Decision(in Unsafe16Array<VelocityPoint> agents, int score)
         {
             Agents = agents;
             Score = score;
         }
 
-        public Decision(in Unsafe8Array<VelocityPoint> agents) : this(agents, 0) { }
+        public Decision(in Unsafe16Array<VelocityPoint> agents) : this(agents, 0) { }
 
         // DO NOT ERASE
         public Decision() { }
@@ -45,7 +45,7 @@ namespace MCTProcon30Protocol
             Decision other = obj as Decision;
             if (other is null) return false;
             if (other.GetHashCode() != this.GetHashCode()) return false;
-            return Unsafe8Array<VelocityPoint>.Equals(this.agents, other.agents, 16);
+            return Unsafe16Array<VelocityPoint>.Equals(this.agents, other.agents, 16);
         }
 
         public override unsafe int GetHashCode()
@@ -62,7 +62,7 @@ namespace MCTProcon30Protocol
             if ((x is null) && (y is null)) return true;
             if (x is null) return false;
             if (y is null) return false;
-            return Unsafe8Array<VelocityPoint>.Equals(x.agents, y.agents, 16);
+            return Unsafe16Array<VelocityPoint>.Equals(x.agents, y.agents, 16);
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace MCTProcon30Protocol
             if ((x is null) && (y is null)) return false;
             if (x is null) return true;
             if (y is null) return true;
-            return !Unsafe8Array<VelocityPoint>.Equals(x.agents, y.agents, 16);
+            return !Unsafe16Array<VelocityPoint>.Equals(x.agents, y.agents, 16);
         }
 
         public override string ToString() => $"Agent1 = {agents.Agent1}, Agent2 = {agents.Agent2}, Agent3 = {agents.Agent3}, Agent4 = {agents.Agent4}, Agent5 = {agents.Agent5}, Agent6 = {agents.Agent6}, Agent7 = {agents.Agent7}, Agent8 = {agents.Agent8}, Score = {Score}";
