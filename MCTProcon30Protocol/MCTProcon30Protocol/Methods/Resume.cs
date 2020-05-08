@@ -25,7 +25,7 @@ namespace MCTProcon30Protocol.Methods
         public sbyte[,] Board { get; set; }
 
         [Key(5)]
-        public ColoredBoardNormalSmaller MeColoredBoard { get; set; }
+        public ColoredBoardNormalSmaller MyColoredBoard { get; set; }
 
         [Key(6)]
         public ColoredBoardNormalSmaller EnemyColoredBoard { get; set; }
@@ -37,22 +37,22 @@ namespace MCTProcon30Protocol.Methods
         public byte AgentsCount { get; set; }
 
         [Key(9)]
-        public ColoredBoardNormalSmaller MeSurroundedBoard { get; set; }
+        public ColoredBoardNormalSmaller MySurroundedBoard { get; set; }
 
         [Key(10)]
         public ColoredBoardNormalSmaller EnemySurroundedBoard { get; set; }
 
-        public Resume(byte turn, byte currentTurn, int boardHeight, int boardWidth, sbyte[,] board, ColoredBoardNormalSmaller meColoredBoard, ColoredBoardNormalSmaller enemyColoredBoard, byte agentsCount, ColoredBoardNormalSmaller meSurroundedBoard, ColoredBoardNormalSmaller enemySurroundedBoard)
+        public Resume(byte turn, byte currentTurn, int boardHeight, int boardWidth, sbyte[,] board, ColoredBoardNormalSmaller myColoredBoard, ColoredBoardNormalSmaller enemyColoredBoard, byte agentsCount, ColoredBoardNormalSmaller mySurroundedBoard, ColoredBoardNormalSmaller enemySurroundedBoard)
         {
             Turns = turn;
             CurrentTurn = currentTurn;
             BoardHeight = boardHeight;
             BoardWidth = boardWidth;
             Board = board;
-            MeColoredBoard = meColoredBoard;
+            MyColoredBoard = myColoredBoard;
             EnemyColoredBoard = enemyColoredBoard;
             AgentsCount = agentsCount;
-            MeSurroundedBoard = meSurroundedBoard;
+            MySurroundedBoard = mySurroundedBoard;
             EnemySurroundedBoard = enemySurroundedBoard;
         }
 

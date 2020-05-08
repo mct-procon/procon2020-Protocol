@@ -42,8 +42,8 @@ namespace MCTProcon30Protocol.AIFramework
 
         public ColoredBoardNormalSmaller MyBoard { get; set; }
         public ColoredBoardNormalSmaller EnemyBoard { get; set; }
-        public ColoredBoardNormalSmaller MyPosisonBoard { get; set; }
-        public ColoredBoardNormalSmaller EnemyPosisonBoard { get; set; }
+        public ColoredBoardNormalSmaller MySurroundedBoard { get; set; }
+        public ColoredBoardNormalSmaller EnemySurroundedBoard { get; set; }
         public int AgentsCount { get; set; }
 
         public int CurrentTurn { get; set; }
@@ -102,18 +102,18 @@ namespace MCTProcon30Protocol.AIFramework
 
         public void OnTurnStart(TurnStart turn)
         {
-            MyBoard = turn.MeColoredBoard;
+            MyBoard = turn.MyColoredBoard;
             EnemyBoard = turn.EnemyColoredBoard;
             MyAgents = turn.MyAgents;
             EnemyAgents = turn.EnemyAgents;
             IsAgentsMoved = turn.IsAgentsMoved;
             CurrentTurn = turn.Turn;
-            MyPosisonBoard = turn.MeSurroundedBoard;
-            EnemyPosisonBoard = turn.EnemySurroundedBoard;
+            MySurroundedBoard = turn.MySurroundedBoard;
+            EnemySurroundedBoard = turn.EnemySurroundedBoard;
             SendingFinished = false;
 
             Log("[IPC] Receive TurnStart turn = {0}", turn.Turn);
-            DumpBoard(turn.MeColoredBoard, turn.EnemyColoredBoard, turn.MeSurroundedBoard, turn.EnemySurroundedBoard, AgentsCount, MyAgents, EnemyAgents);
+            DumpBoard(turn.MyColoredBoard, turn.EnemyColoredBoard, turn.MySurroundedBoard, turn.EnemySurroundedBoard, AgentsCount, MyAgents, EnemyAgents);
 
             StartSolve();
             if (IsEnableTimer)

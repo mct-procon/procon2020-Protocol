@@ -21,7 +21,7 @@ namespace MCTProcon30Protocol.Methods
         public Unsafe8Array<Point> EnemyAgents { get; set; }
 
         [Key(5)]
-        public ColoredBoardNormalSmaller MeColoredBoard { get; set; }
+        public ColoredBoardNormalSmaller MyColoredBoard { get; set; }
 
         [Key(6)]
         public ColoredBoardNormalSmaller EnemyColoredBoard { get; set; }
@@ -30,21 +30,21 @@ namespace MCTProcon30Protocol.Methods
         public Unsafe8Array<bool> IsAgentsMoved { get; set; }
 
         [Key(8)]
-        public ColoredBoardNormalSmaller MeSurroundedBoard { get; set; }
+        public ColoredBoardNormalSmaller MySurroundedBoard { get; set; }
 
         [Key(9)]
         public ColoredBoardNormalSmaller EnemySurroundedBoard { get; set; }
 
-        public TurnStart(byte turn, int waitMiliSecs, in Unsafe8Array<Point> myAgents, in Unsafe8Array<Point> enemyAgents, in ColoredBoardNormalSmaller meColoredBoard, in ColoredBoardNormalSmaller enemyColoredBoard, in Unsafe8Array<bool> isAgentsMoved, in ColoredBoardNormalSmaller meSurroundedBoard, in ColoredBoardNormalSmaller enemySurroundedBoard)
+        public TurnStart(byte turn, int waitMiliSecs, in Unsafe8Array<Point> myAgents, in Unsafe8Array<Point> enemyAgents, in ColoredBoardNormalSmaller myColoredBoard, in ColoredBoardNormalSmaller enemyColoredBoard, in Unsafe8Array<bool> isAgentsMoved, in ColoredBoardNormalSmaller mySurroundedBoard, in ColoredBoardNormalSmaller enemySurroundedBoard)
         {
             Turn = turn;
             WaitMiliSeconds = waitMiliSecs;
             MyAgents = myAgents;
             EnemyAgents = enemyAgents;
-            MeColoredBoard = meColoredBoard;
+            MyColoredBoard = myColoredBoard;
             EnemyColoredBoard = enemyColoredBoard;
             IsAgentsMoved = isAgentsMoved;
-            MeSurroundedBoard = meSurroundedBoard; 
+            MySurroundedBoard = mySurroundedBoard; 
             EnemySurroundedBoard = enemySurroundedBoard;
         }
 
