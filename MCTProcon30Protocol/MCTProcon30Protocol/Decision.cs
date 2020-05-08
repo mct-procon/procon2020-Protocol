@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace MCTProcon30Protocol
@@ -28,6 +29,12 @@ namespace MCTProcon30Protocol
         /// </summary>
         [Key(1)]
         public int Score { get; set; }
+
+        /// <summary>
+        /// Count of agents.
+        /// </summary>
+        [Key(2)]
+        public byte AgentsCount { get; set; }
 
         public Decision(in Unsafe16Array<VelocityPoint> agents, int score)
         {
@@ -62,7 +69,8 @@ namespace MCTProcon30Protocol
             if ((x is null) && (y is null)) return true;
             if (x is null) return false;
             if (y is null) return false;
-            return Unsafe16Array<VelocityPoint>.Equals(x.agents, y.agents, 16);
+            if (x.AgentsCount != y.AgentsCount) return false;
+            return Unsafe16Array<VelocityPoint>.Equals(x.agents, y.agents, x.AgentsCount);
         }
 
         /// <summary>
@@ -73,9 +81,27 @@ namespace MCTProcon30Protocol
             if ((x is null) && (y is null)) return false;
             if (x is null) return true;
             if (y is null) return true;
-            return !Unsafe16Array<VelocityPoint>.Equals(x.agents, y.agents, 16);
+            if (x.AgentsCount != y.AgentsCount) return false;
+            return !Unsafe16Array<VelocityPoint>.Equals(x.agents, y.agents, x.AgentsCount);
         }
 
-        public override string ToString() => $"Agent1 = {agents.Agent1}, Agent2 = {agents.Agent2}, Agent3 = {agents.Agent3}, Agent4 = {agents.Agent4}, Agent5 = {agents.Agent5}, Agent6 = {agents.Agent6}, Agent7 = {agents.Agent7}, Agent8 = {agents.Agent8}, Score = {Score}";
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("AgentsCount = ");
+            sb.Append(AgentsCount.ToString());
+            sb.Append(", ");
+            for (int i = 0; i < AgentsCount; ++i)
+            {
+                sb.Append("Agent");
+                sb.Append((i + 1).ToString());
+                sb.Append(" = ");
+                sb.Append(Agents[i].ToString());
+                sb.Append(", ");
+            }
+            sb.Append("Score = ");
+            sb.Append(Score.ToString());
+            return sb.ToString();
+        }
     }
 }
