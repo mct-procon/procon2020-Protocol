@@ -6,14 +6,14 @@ using MessagePack;
 
 namespace MCTProcon30Protocol
 {
-    public interface ColoredBoard
-    {
-        //uint Width { get; }
-        //uint Height { get; }
+    //public interface ColoredBoard
+    //{
+    //    //uint Width { get; }
+    //    //uint Height { get; }
 
-        bool this[uint x, uint y] { get; set; }
-        bool this[Point p] { get; set; }
-    }
+    //    bool this[uint x, uint y] { get; set; }
+    //    bool this[Point p] { get; set; }
+    //}
 
     //public struct ColoredBoardSmall : ColoredBoard
     //{
@@ -119,7 +119,7 @@ namespace MCTProcon30Protocol
 //        }
 //    }
 
-    public unsafe struct ColoredBoardNormalSmaller : ColoredBoard
+    public unsafe struct ColoredBoardNormalSmaller // : ColoredBoard
     {
         internal const int BoardSize = 24;
 
@@ -178,6 +178,15 @@ namespace MCTProcon30Protocol
         public bool this[Point p] {
             get => this[p.X, p.Y];
             set => this[p.X, p.Y] = value;
+        }
+
+        public void Invert()
+        {
+            fixed(uint * ptr = board)
+            {
+                for (int i = 0; i < BoardSize; ++i)
+                    board[i] = board[i] ^ uint.MaxValue;
+            }
         }
     }
 
