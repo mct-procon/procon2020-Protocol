@@ -182,7 +182,8 @@ namespace MCTProcon30Protocol.AIFramework
         public void OnRequestAnswer(RequestAnswer requestAnswer)
         {
             Log("[IPC] Received RequestAnswer");
-            SendDecided();
+            SendingFinished = false;
+            EndSolve(null, EventArgs.Empty);
         }
 
         private void StartSolve()
