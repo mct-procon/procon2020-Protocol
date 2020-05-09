@@ -13,6 +13,7 @@ namespace MCTProcon30Protocol
         void OnPause(Methods.Pause pause);
         void OnInterrupt(Methods.Interrupt interrupt);
         void OnRebaseByUser(Methods.RebaseByUser rebase);
+        void OnRequestAnswer(Methods.RequestAnswer requestAnswer);
     }
 
     public interface IIPCServerReader

@@ -33,6 +33,7 @@ namespace MCTProcon30Protocol.AIFramework
 
         public bool IsWriteLog { get; set; } = false;
         public bool IsWriteBoard { get; set; } = false;
+        public bool IsAutoSend { get; set; } = true;
 
         public sbyte[,] ScoreBoard { get; set; }
         public Unsafe16Array<Point> MyAgents { get; set; }
@@ -76,7 +77,7 @@ namespace MCTProcon30Protocol.AIFramework
 #pragma warning restore CS4014
             SynchronizeStopper.Wait();
         }
-        public virtual async Task Start(int port, bool isWriteLog = false, bool isWriteBoard = false)
+        public virtual async Task Start(int port, bool isWriteLog = false, bool isWriteBoard = false, bool isAutoSend = true)
         {
             SynchronizeStopper.Reset();
             IsWriteLog = isWriteLog;
@@ -176,6 +177,12 @@ namespace MCTProcon30Protocol.AIFramework
         public void OnRebaseByUser(RebaseByUser rebase)
         {
             Log("[IPC] Received Rebase By User");
+        }
+
+        public void OnRequestAnswer(RequestAnswer requestAnswer)
+        {
+            Log("[IPC] Received RequestAnswer");
+            SendDecided();
         }
 
         private void StartSolve()
