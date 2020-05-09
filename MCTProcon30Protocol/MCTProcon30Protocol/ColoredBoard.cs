@@ -8,8 +8,8 @@ namespace MCTProcon30Protocol
 {
     public interface ColoredBoard
     {
-        uint Width { get; }
-        uint Height { get; }
+        //uint Width { get; }
+        //uint Height { get; }
 
         bool this[uint x, uint y] { get; set; }
         bool this[Point p] { get; set; }
@@ -121,23 +121,21 @@ namespace MCTProcon30Protocol
 
     public unsafe struct ColoredBoardNormalSmaller : ColoredBoard
     {
-        internal const int BoardSize = 32;
+        internal const int BoardSize = 24;
 
-        [Key(2)]
+        [Key(0)]
         //DON'T USE!
         internal fixed uint board[BoardSize];
 
-        [Key(0)]
-        public uint Width { get; private set; }
-        [Key(1)]
-        public uint Height { get; private set; }
+        //[Key(0)]
+        //public uint Width { get; private set; }
+        //[Key(1)]
+        //public uint Height { get; private set; }
 
-        public ColoredBoardNormalSmaller(uint width = 0, uint height = 0)
+        public ColoredBoardNormalSmaller(uint width = 1, uint height = 1)
         {
-            if (width > 32 || height > 32 || (width == 0 && height == 0))
-                throw new ArgumentOutOfRangeException("both x and y is less than 32 and greater than 0 or equal to 0.");
-            Width = width;
-            Height = height;
+            if (width > 32 || height > BoardSize || (width == 0 && height == 0))
+                throw new ArgumentOutOfRangeException("both x and y is less than 32, 24 and greater than 0 or equal to 0.");
 
             fixed (uint* ptr = board)
             {
@@ -151,8 +149,10 @@ namespace MCTProcon30Protocol
 
         public bool this[uint x, uint y] {
             get {
-                if (x >= Width || y >= Height) throw new ArgumentOutOfRangeException();
-
+                //if (x >= Width || y >= Height) throw new ArgumentOutOfRangeException();
+#if DEBUG
+                if (x >= 32 || y >= BoardSize) throw new ArgumentOutOfRangeException();
+#endif
                 bool result = false;
                 fixed (uint* ptr = board)
                 {
@@ -161,8 +161,10 @@ namespace MCTProcon30Protocol
                 return result;
             }
             set {
-                if (x >= Width || y >= Height) throw new ArgumentOutOfRangeException();
-
+                //if (x >= Width || y >= Height) throw new ArgumentOutOfRangeException();
+#if DEBUG
+                if (x >= 32 || y >= BoardSize) throw new ArgumentOutOfRangeException();
+#endif
                 fixed (uint* ptr = board)
                 {
                     if (value)

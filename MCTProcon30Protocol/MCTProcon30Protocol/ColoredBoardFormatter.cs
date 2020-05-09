@@ -40,11 +40,12 @@ namespace MCTProcon30Protocol
         public unsafe ColoredBoardNormalSmaller Deserialize(byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize)
         {
             var startoffset = offset;
-            var width = MessagePackBinary.ReadUInt32(bytes, offset, out readSize);
-            offset += readSize;
-            var height = MessagePackBinary.ReadUInt32(bytes, offset, out readSize);
-            offset += readSize;
-            var result = new ColoredBoardNormalSmaller(width, height);
+            //var width = MessagePackBinary.ReadUInt32(bytes, offset, out readSize);
+            //offset += readSize;
+            //var height = MessagePackBinary.ReadUInt32(bytes, offset, out readSize);
+            //offset += readSize;
+            //var result = new ColoredBoardNormalSmaller(width, height);
+            var result = new ColoredBoardNormalSmaller();
             for (int i = 0; i < ColoredBoardNormalSmaller.BoardSize; ++i)
             {
                 result.board[i] = MessagePackBinary.ReadUInt32(bytes, offset, out readSize);
@@ -57,8 +58,8 @@ namespace MCTProcon30Protocol
         public unsafe int Serialize(ref byte[] bytes, int offset, ColoredBoardNormalSmaller value, IFormatterResolver formatterResolver)
         {
             var startoffset = offset;
-            offset += MessagePackBinary.WriteUInt32(ref bytes, offset, value.Width);
-            offset += MessagePackBinary.WriteUInt32(ref bytes, offset, value.Height);
+            //offset += MessagePackBinary.WriteUInt32(ref bytes, offset, value.Width);
+            //offset += MessagePackBinary.WriteUInt32(ref bytes, offset, value.Height);
             for (int i = 0; i < ColoredBoardNormalSmaller.BoardSize; ++i)
                 offset += MessagePackBinary.WriteUInt32(ref bytes, offset, value.board[i]);
             return offset - startoffset;
