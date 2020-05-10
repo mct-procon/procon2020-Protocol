@@ -47,22 +47,24 @@ namespace MCTProcon30Protocol
         {
             unchecked
             {
-                MCTProcon30Protocol.Point* myStack = stackalloc MCTProcon30Protocol.Point[20 * 20];
+                int* DistanceX = stackalloc[] { 0, 1, 0, -1, 1, 1, -1, -1 };
+                int* DistanceY = stackalloc[] { 1, 0, -1, 0, -1, 1, 1, -1 };
+                Point* myStack = stackalloc Point[24 * 24];
 
-                MCTProcon30Protocol.Point point;
-                byte x, y, searchTo = 0, myStackSize = 0;
+                Point point;
+                byte x, y, searchTo = 0, searchToX, searchToY, myStackSize = 0;
 
                 searchTo = (byte)(height - 1);
                 for (x = 0; x < width; x++)
                 {
                     if (!Checker[x, 0])
                     {
-                        myStack[myStackSize++] = new MCTProcon30Protocol.Point(x, 0);
+                        myStack[myStackSize++] = new Point(x, 0);
                         Checker[x, 0] = true;
                     }
                     if (!Checker[x, searchTo])
                     {
-                        myStack[myStackSize++] = new MCTProcon30Protocol.Point(x, searchTo);
+                        myStack[myStackSize++] = new Point(x, searchTo);
                         Checker[x, searchTo] = true;
                     }
                 }
@@ -72,12 +74,12 @@ namespace MCTProcon30Protocol
                 {
                     if (!Checker[0, y])
                     {
-                        myStack[myStackSize++] = new MCTProcon30Protocol.Point(0, y);
+                        myStack[myStackSize++] = new Point(0, y);
                         Checker[0, y] = true;
                     }
                     if (!Checker[searchTo, y])
                     {
-                        myStack[myStackSize++] = new MCTProcon30Protocol.Point(searchTo, y);
+                        myStack[myStackSize++] = new Point(searchTo, y);
                         Checker[searchTo, y] = true;
                     }
                 }
@@ -88,36 +90,15 @@ namespace MCTProcon30Protocol
                     x = point.X;
                     y = point.Y;
 
-                    //左方向
-                    searchTo = (byte)(x - 1);
-                    if (searchTo < width && !Checker[searchTo, y])
+                    for (int i = 0; i < 8; i++)
                     {
-                        myStack[myStackSize++] = new MCTProcon30Protocol.Point(searchTo, y);
-                        Checker[searchTo, y] = true;
-                    }
-
-                    //下方向
-                    searchTo = (byte)(y + 1);
-                    if (searchTo < height && !Checker[x, searchTo])
-                    {
-                        myStack[myStackSize++] = new MCTProcon30Protocol.Point(x, searchTo);
-                        Checker[x, searchTo] = true;
-                    }
-
-                    //右方向
-                    searchTo = (byte)(x + 1);
-                    if (searchTo < width && !Checker[searchTo, y])
-                    {
-                        myStack[myStackSize++] = new MCTProcon30Protocol.Point(searchTo, y);
-                        Checker[searchTo, y] = true;
-                    }
-
-                    //上方向
-                    searchTo = (byte)(y - 1);
-                    if (searchTo < height && !Checker[x, searchTo])
-                    {
-                        myStack[myStackSize++] = new MCTProcon30Protocol.Point(x, searchTo);
-                        Checker[x, searchTo] = true;
+                        searchToX = (byte)(x + DistanceX[i]);
+                        searchToY = (byte)(y + DistanceY[i]);
+                        if (searchToX < width && searchToY < height && !Checker[searchToX, searchToY])
+                        {
+                            myStack[myStackSize++] = new Point(searchToX, searchToY);
+                            Checker[searchToX, searchToY] = true;
+                        }
                     }
                 }
             }
