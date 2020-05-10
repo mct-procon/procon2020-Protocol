@@ -37,9 +37,8 @@ namespace MCTProcon30Protocol
     //}
     public class ColoredBoardNormalSmallerFormatter : IMessagePackFormatter<ColoredBoardNormalSmaller>
     {
-        public unsafe ColoredBoardNormalSmaller Deserialize(byte[] bytes, int offset, IFormatterResolver formatterResolver, out int readSize)
+        public unsafe ColoredBoardNormalSmaller Deserialize(ref MessagePackReader reader, MessagePackSerializerOptions options)
         {
-            var startoffset = offset;
             //var width = MessagePackBinary.ReadUInt32(bytes, offset, out readSize);
             //offset += readSize;
             //var height = MessagePackBinary.ReadUInt32(bytes, offset, out readSize);
@@ -47,22 +46,16 @@ namespace MCTProcon30Protocol
             //var result = new ColoredBoardNormalSmaller(width, height);
             var result = new ColoredBoardNormalSmaller();
             for (int i = 0; i < ColoredBoardNormalSmaller.BoardSize; ++i)
-            {
-                result.board[i] = MessagePackBinary.ReadUInt32(bytes, offset, out readSize);
-                offset += readSize;
-            }
-            readSize = offset - startoffset;
+                result.board[i] = reader.ReadUInt32();
             return result;
         }
 
-        public unsafe int Serialize(ref byte[] bytes, int offset, ColoredBoardNormalSmaller value, IFormatterResolver formatterResolver)
+        public  unsafe void Serialize(ref MessagePackWriter writer, ColoredBoardNormalSmaller value, MessagePackSerializerOptions options)
         {
-            var startoffset = offset;
             //offset += MessagePackBinary.WriteUInt32(ref bytes, offset, value.Width);
             //offset += MessagePackBinary.WriteUInt32(ref bytes, offset, value.Height);
             for (int i = 0; i < ColoredBoardNormalSmaller.BoardSize; ++i)
-                offset += MessagePackBinary.WriteUInt32(ref bytes, offset, value.board[i]);
-            return offset - startoffset;
+                writer.WriteUInt32(value.board[i]);
         }
     }
 }

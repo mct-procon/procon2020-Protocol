@@ -16,8 +16,9 @@ namespace MCTProcon30Protocol
     {
         static IPCManager()
         {
-            MessagePack.Resolvers.CompositeResolver.RegisterAndSetAsDefault(
-                new MessagePack.Formatters.IMessagePackFormatter[] { new ColoredBoardNormalSmallerFormatter() }, new[] { MessagePack.Resolvers.StandardResolver.Instance });
+            MessagePackSerializer.DefaultOptions = MessagePackSerializerOptions.Standard.WithResolver(
+                MessagePack.Resolvers.CompositeResolver.Create(new[] { new ColoredBoardNormalSmallerFormatter() }, new[] { MessagePack.Resolvers.StandardResolver.Instance })
+                );
         }
 
         TcpListener listener;
@@ -28,8 +29,6 @@ namespace MCTProcon30Protocol
         IIPCServerReader serverReader;
 
         Process AIProcess = null;
-
-        Queue<byte[]> writeQueue = new Queue<byte[]>();
 
         CancellationTokenSource Canceller;
 
