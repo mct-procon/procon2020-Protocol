@@ -36,13 +36,14 @@ namespace MCTProcon31Protocol
         [Key(2)]
         public byte AgentsCount { get; set; }
 
-        public Decision(in Unsafe16Array<VelocityPoint> agents, int score)
+        public Decision(byte agentsCount, in Unsafe16Array<VelocityPoint> agents, int score)
         {
+            AgentsCount = agentsCount;
             Agents = agents;
             Score = score;
         }
 
-        public Decision(in Unsafe16Array<VelocityPoint> agents) : this(agents, 0) { }
+        public Decision(byte agentsCount, in Unsafe16Array<VelocityPoint> agents) : this(agentsCount, agents, 0) { }
 
         // DO NOT ERASE
         public Decision() { }
