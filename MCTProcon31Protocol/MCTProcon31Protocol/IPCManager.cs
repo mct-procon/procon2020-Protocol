@@ -172,6 +172,9 @@ namespace MCTProcon31Protocol
                             case Methods.DataKind.RebaseByUser:
                                 clientReader.OnRebaseByUser(MessagePackSerializer.Deserialize<Methods.RebaseByUser>(currentBuffer));
                                 break;
+                            case Methods.DataKind.RequestAnswer:
+                                clientReader.OnRequestAnswer(MessagePackSerializer.Deserialize<Methods.RequestAnswer>(currentBuffer));
+                                break;
                             default:
                                 throw new FormatException();
                         }
