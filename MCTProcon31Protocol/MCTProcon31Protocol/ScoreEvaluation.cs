@@ -6,30 +6,37 @@ namespace MCTProcon31Protocol
 {
     public static class ScoreEvaluation
     {
-        public static int EvaluateGameScore(ColoredBoardNormalSmaller board, sbyte[,] score)
+        public static int EvaluateGameScore(ColoredBoardNormalSmaller meBoard, ColoredBoardNormalSmaller enemyBoard, sbyte[,] score)
         {
+            ColoredBoardNormalSmaller colored = new ColoredBoardNormalSmaller((uint)score.GetLength(0), (uint)score.GetLength(1));
             int result = 0;
 
             for (uint x = 0; x < score.GetLength(0); ++x)
                 for (uint y = 0; y < score.GetLength(1); ++y)
-                    if (board[x,y])
+                {
+                    if (meBoard[x, y])
                         result += score[x, y];
+                    colored[x, y] = meBoard[x, y] || enemyBoard[x, y];
+                }
 
-            BadSpaceFill(ref board, (byte)score.GetLength(0), (byte)score.GetLength(1));
+
+            BadSpaceFill(ref meBoard, enemyBoard, (byte)score.GetLength(0), (byte)score.GetLength(1));
+            BadSpaceFill(ref enemyBoard, meBoard, (byte)score.GetLength(0), (byte)score.GetLength(1), false);
 
             for (uint x = 0; x < score.GetLength(0); ++x)
                 for (uint y = 0; y < score.GetLength(1); ++y)
-                    if (!board[x, y])
+                    if (!meBoard[x, y] && enemyBoard[x, y] && !colored[x, y])
                         result += Math.Abs(score[x, y]);
             return result;
         }
 
+        /*
         public static int EvaluateFilledScore(in ColoredBoardNormalSmaller board, sbyte[,] score)
         {
             int result = 0;
             for (uint x = 0; x < score.GetLength(0); ++x)
                 for (uint y = 0; y < score.GetLength(1); ++y)
-                    if(board[x, y]) result += score[x, y];
+                    if (board[x, y]) result += score[x, y];
             return result;
         }
 
@@ -39,11 +46,13 @@ namespace MCTProcon31Protocol
             int result = 0;
             for (uint x = 0; x < score.GetLength(0); ++x)
                 for (uint y = 0; y < score.GetLength(1); ++y)
-                    if (!board[x, y]) result += Math.Abs(score[x,y]);
+                    if (!board[x, y]) result += Math.Abs(score[x, y]);
             return result;
-        }
+        }*/
 
-        public static unsafe void BadSpaceFill(ref ColoredBoardNormalSmaller Checker, byte width, byte height)
+        public static unsafe void BadSpaceFill(
+            ref ColoredBoardNormalSmaller Checker, ColoredBoardNormalSmaller enemyChecker, byte width, byte height, bool isFirst = true
+            )
         {
             unchecked
             {
@@ -54,36 +63,51 @@ namespace MCTProcon31Protocol
                 Point point;
                 byte x, y, searchTo = 0, searchToX, searchToY, myStackSize = 0;
 
-                searchTo = (byte)(height - 1);
-                for (x = 0; x < width; x++)
+                if (isFirst)
                 {
-                    if (!Checker[x, 0])
+                    searchTo = (byte)(height - 1);
+                    for (x = 0; x < width; x++)
                     {
-                        myStack[myStackSize++] = new Point(x, 0);
-                        Checker[x, 0] = true;
+                        if (!Checker[x, 0])
+                        {
+                            myStack[myStackSize++] = new Point(x, 0);
+                            Checker[x, 0] = true;
+                        }
+                        if (!Checker[x, searchTo])
+                        {
+                            myStack[myStackSize++] = new Point(x, searchTo);
+                            Checker[x, searchTo] = true;
+                        }
                     }
-                    if (!Checker[x, searchTo])
+
+                    searchTo = (byte)(width - 1);
+                    for (y = 0; y < height; y++)
                     {
-                        myStack[myStackSize++] = new Point(x, searchTo);
-                        Checker[x, searchTo] = true;
+                        if (!Checker[0, y])
+                        {
+                            myStack[myStackSize++] = new Point(0, y);
+                            Checker[0, y] = true;
+                        }
+                        if (!Checker[searchTo, y])
+                        {
+                            myStack[myStackSize++] = new Point(searchTo, y);
+                            Checker[searchTo, y] = true;
+                        }
                     }
                 }
-
-                searchTo = (byte)(width - 1);
-                for (y = 0; y < height; y++)
+                else
                 {
-                    if (!Checker[0, y])
-                    {
-                        myStack[myStackSize++] = new Point(0, y);
-                        Checker[0, y] = true;
-                    }
-                    if (!Checker[searchTo, y])
-                    {
-                        myStack[myStackSize++] = new Point(searchTo, y);
-                        Checker[searchTo, y] = true;
-                    }
+                    for (x = 0; x < width; x++)
+                        for (y = 0; y < height; y++)
+                        {
+                            if (enemyChecker[x, y])
+                            {
+                                myStack[myStackSize++] = new Point(x, y);
+                                Checker[x, y] = true;
+                            }
+                        }
                 }
-
+                
                 while (myStackSize > 0)
                 {
                     point = myStack[--myStackSize];
