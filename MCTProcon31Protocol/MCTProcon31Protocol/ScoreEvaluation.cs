@@ -51,7 +51,7 @@ namespace MCTProcon31Protocol
         }*/
 
         public static unsafe void BadSpaceFill(
-            ref ColoredBoardNormalSmaller Checker, ColoredBoardNormalSmaller enemyChecker, byte width, byte height, bool isFirst = true
+            ref ColoredBoardNormalSmaller Checker, in ColoredBoardNormalSmaller enemyChecker, byte width, byte height, bool isFirst = true
             )
         {
             unchecked
