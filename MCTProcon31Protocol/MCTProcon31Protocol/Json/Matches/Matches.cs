@@ -9,7 +9,7 @@ namespace MCTProcon31Protocol.Json.Matches
     public class Matches
     {
         [JsonProperty("matches")]
-        public Match[] _value { get; set; }
+        public MatchInformation[] _value { get; set; }
 
         public Match this[int i] {
             get => _value[i];
