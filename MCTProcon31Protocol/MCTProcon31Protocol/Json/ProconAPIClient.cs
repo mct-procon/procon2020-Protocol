@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MCTProcon31Protocol.Json
 {
-    public class ProconAPIClient
+    public class ProconAPIClient : IDisposable
     {
         private HttpClient hc { get; set; }
         private string endPoint { get; set; }
@@ -48,6 +48,11 @@ namespace MCTProcon31Protocol.Json
         public Task<APIResult<Matches.Match>> Match(int matchId) => Get<Matches.Match>("matches/" + matchId.ToString());
         public Task<APIResult<Matches.Match>> Match(Matches.MatchInformation matchId) => Match(matchId.Id);
         public Task<APIResult<Matches.AgentActions>> SendAction(int matchId, Matches.AgentActions actions) => Post<Matches.AgentActions, Matches.AgentActions>("matches/" + matchId.ToString() + "/action", actions);
+
+        public void Dispose()
+        {
+            ((IDisposable)hc).Dispose();
+        }
     }
     public struct APIResult<T> where T : class
     {
