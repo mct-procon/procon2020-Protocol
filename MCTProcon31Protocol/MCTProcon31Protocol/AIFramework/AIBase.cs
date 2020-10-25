@@ -66,8 +66,14 @@ namespace MCTProcon31Protocol.AIFramework
         {
             ipc = new IPCManager(this);
             timer = new System.Timers.Timer();
-            timer.Elapsed += this.EndSolve;
+            timer.Elapsed += this.timerElasped;
             timer.AutoReset = false;
+        }
+
+        private void timerElasped(object sender, EventArgs args)
+        {
+            this.timer.Enabled = false;
+            EndSolve();
         }
 
         public virtual void StartSync(int port, bool isWriteLog = false, bool isWriteBoard = false)
@@ -183,7 +189,7 @@ namespace MCTProcon31Protocol.AIFramework
         {
             Log("[IPC] Received RequestAnswer");
             SendingFinished = false;
-            EndSolve(null, EventArgs.Empty);
+            EndSolve();
         }
 
         private void StartSolve()
@@ -274,9 +280,8 @@ namespace MCTProcon31Protocol.AIFramework
         protected abstract void EndGame(GameEnd end);
         protected abstract void Solve();
         protected virtual int CalculateTimerMiliSconds(int miliseconds) => miliseconds - 1500;
-        protected virtual void EndSolve(object sender, EventArgs e)
+        protected virtual void EndSolve()
         {
-            timer.Enabled = false;
             if (SendingFinished) return;
             if (SolverTask.IsFaulted)
             {
@@ -298,6 +303,7 @@ namespace MCTProcon31Protocol.AIFramework
             }
             Log("[SOLVER] Thinking Stop.");
         }
+
 
         protected virtual void SendDecided()
         {
