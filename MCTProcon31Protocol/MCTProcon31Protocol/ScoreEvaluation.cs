@@ -50,15 +50,15 @@ namespace MCTProcon31Protocol
             return result;
         }*/
 
-        public static unsafe void BadSpaceFill(
+        public static void BadSpaceFill(
             ref ColoredBoardNormalSmaller Checker, in ColoredBoardNormalSmaller enemyChecker, byte width, byte height, bool isFirst = true
             )
         {
             unchecked
             {
-                int* DistanceX = stackalloc[] { 0, 1, 0, -1, 1, 1, -1, -1 };
-                int* DistanceY = stackalloc[] { 1, 0, -1, 0, -1, 1, 1, -1 };
-                Point* myStack = stackalloc Point[24 * 24];
+                Span<int> DistanceX = stackalloc[] { 0, 1, 0, -1, 1, 1, -1, -1 };
+                Span<int> DistanceY = stackalloc[] { 1, 0, -1, 0, -1, 1, 1, -1 };
+                Span<Point> myStack = stackalloc Point[24 * 24];
 
                 Point point;
                 byte x, y, searchTo = 0, searchToX, searchToY, myStackSize = 0;
