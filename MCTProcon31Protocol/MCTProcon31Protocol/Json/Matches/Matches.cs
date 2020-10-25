@@ -11,7 +11,7 @@ namespace MCTProcon31Protocol.Json.Matches
         [JsonProperty("matches")]
         public MatchInformation[] _value { get; set; }
 
-        public Match this[int i] {
+        public MatchInformation this[int i] {
             get => _value[i];
             set => _value[i] = value;
         }
