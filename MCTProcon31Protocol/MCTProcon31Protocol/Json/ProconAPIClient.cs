@@ -26,6 +26,13 @@ namespace MCTProcon31Protocol.Json
             hc.DefaultRequestHeaders.Add("x-api-token", apiToken);
         }
 
+#nullable enable
+        public void ChangeTokenAndEndPoint(string? apiToken, string? endPoint)
+        {
+            if (!(apiToken is null)) PrepareHeader(apiToken);
+            if (!(endPoint is null)) this.endPoint = endPoint;
+        }
+#nullable disable
         private async Task<APIResult<T>> Get<T>(string location) where T : class
         {
             var response = await hc.GetAsync(endPoint + location);
