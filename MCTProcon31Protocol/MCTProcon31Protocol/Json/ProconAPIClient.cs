@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -66,29 +67,44 @@ namespace MCTProcon31Protocol.Json
         public int HTTPReturnCode { get; set; }
         public T Value { get; private set; }
         public bool IsSuccess => !(Value is null);
+        public int RetryAfter { get; set; }
 
-        internal APIResult(int httpCode, T val)
+        internal APIResult(int httpCode, T val, int retryAfter)
         {
             HTTPReturnCode = httpCode;
             Value = val;
+            RetryAfter = retryAfter;
         }
 
         internal APIResult(int httpCode)
         {
             HTTPReturnCode = httpCode;
             Value = null;
+            RetryAfter = -1;
+        }
+
+        internal APIResult(int httpCode, int retryAfter)
+        {
+            HTTPReturnCode = httpCode;
+            Value = null;
+            RetryAfter = retryAfter;
         }
 
         internal APIResult(T val)
         {
             HTTPReturnCode = (int)System.Net.HttpStatusCode.OK;
             Value = val;
+            RetryAfter = -1;
         }
 
         internal static async Task<APIResult<T>> ResponseToResult(HttpResponseMessage response) =>
             (response.StatusCode == System.Net.HttpStatusCode.OK) ?
                 new APIResult<T>(JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync()))
-            :
-                new APIResult<T>((int)response.StatusCode);
+            : (
+                (int)response.StatusCode == 425 && response.Headers.Contains("retry-after") ? 
+                    new APIResult<T>(425, int.Parse(response.Headers.GetValues("retry-after").First()))
+                :
+                    new APIResult<T>((int)response.StatusCode)
+            );
     }
 }

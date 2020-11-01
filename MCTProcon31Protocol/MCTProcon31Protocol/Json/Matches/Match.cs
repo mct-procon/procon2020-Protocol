@@ -24,7 +24,7 @@ namespace MCTProcon31Protocol.Json.Matches
         public int Height { get; set; }
 
         [JsonProperty("teams")]
-        public TeamInformation[] Teams { get; set; }
+        public Team[] Teams { get; set; }
 
         [JsonProperty("walls")]
         public int[,] Walls { get; set; }
