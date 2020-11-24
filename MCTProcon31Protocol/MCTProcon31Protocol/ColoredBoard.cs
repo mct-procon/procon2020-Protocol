@@ -188,6 +188,18 @@ namespace MCTProcon31Protocol
                     board[i] = board[i] ^ uint.MaxValue;
             }
         }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            for (uint y = 0; y < BoardSize; ++y)
+            {
+                for (uint x = 0; x < 32; ++x)
+                    sb.Append(this[x, y] == true ? "x" : "o");
+                sb.AppendLine();
+            }
+            return sb.ToString();
+        }
     }
 
     //public unsafe struct ColoredBoardNormal : ColoredBoard
