@@ -43,11 +43,6 @@ namespace MCTProcon31Protocol.AIFramework
         public Unsafe16Array<AgentState> MyAgentsState { get; set; }
         public Unsafe16Array<AgentState> EnemyAgentsState { get; set; }
 
-        public byte MyAgentsCount { get; set; }
-        public byte EnemyAgentsCount { get; set; }
-
-
-
         public ColoredBoardNormalSmaller MyBoard { get; set; }
         public ColoredBoardNormalSmaller EnemyBoard { get; set; }
         public ColoredBoardNormalSmaller MySurroundedBoard { get; set; }
@@ -124,8 +119,6 @@ namespace MCTProcon31Protocol.AIFramework
             CurrentTurn = turn.Turn;
             MySurroundedBoard = turn.MySurroundedBoard;
             EnemySurroundedBoard = turn.EnemySurroundedBoard;
-            MyAgentsCount = turn.MyAgentsCount;
-            EnemyAgentsCount = turn.EnemyAgentsCount;
             MyAgentsState = turn.MyAgentsState;
             EnemyAgentsState = turn.EnemyAgentsState;
             SendingFinished = false;
