@@ -32,11 +32,8 @@ namespace MCTProcon31Protocol
             this.Y = y;
         }
 
-        public static int Pack(byte x, byte y)
-            => x | (y << 8);
-
-        public override int GetHashCode()
-            => X | (Y << 8);
+        public static int Pack(byte x, byte y) => x | (y << 8);
+        public override int GetHashCode() => Pack(X, Y);
 
         public override bool Equals(object obj)
         {
