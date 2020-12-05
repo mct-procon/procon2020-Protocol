@@ -46,6 +46,7 @@ namespace MCTProcon31Protocol
         public Decision(byte agentsCount, in Unsafe16Array<Point> agents, in Unsafe16Array<AgentState> agentsState, int score)
         {
             AgentsCount = agentsCount;
+            AgentsState = agentsState;
             Agents = agents;
             Score = score;
         }
