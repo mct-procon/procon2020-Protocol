@@ -7,6 +7,55 @@ using System.Runtime.InteropServices;
 
 namespace MCTProcon31Protocol
 {
+    public static class Unsafe16Array
+    {
+
+        public static Unsafe16Array<T> Create<T>(IReadOnlyList<T> agents) where T : unmanaged
+        {
+#if DEBUG
+            if ((uint)(agents.Count - 1) > 15) throw new ArgumentOutOfRangeException();
+#endif
+            Unsafe16Array<T> result = new Unsafe16Array<T>();
+            int i = 0;
+            for (; i < agents.Count; ++i)
+                result[i] = agents[i];
+            return result;
+        }
+
+        public static Unsafe16Array<T> Create<T>(params T[] agents) where T : unmanaged
+        {
+#if DEBUG
+            if ((uint)(agents.Length - 1) > 15) throw new ArgumentOutOfRangeException();
+#endif
+            Unsafe16Array<T> result = new Unsafe16Array<T>();
+            int i = 0;
+            for (; i < agents.Length; ++i)
+                result[i] = agents[i];
+            return result;
+        }
+
+        public static unsafe bool Equals(Unsafe16Array<Point> x, Unsafe16Array<Point> y, int size)
+            => EqualsBase((ulong*)Unsafe.AsPointer(ref x), (ulong*)Unsafe.AsPointer(ref y), size);
+
+        public static unsafe bool Equals(Unsafe16Array<VelocityPoint> x, Unsafe16Array<VelocityPoint> y, int size)
+            => EqualsBase((ulong*)Unsafe.AsPointer(ref x), (ulong*)Unsafe.AsPointer(ref y), size);
+
+        public static unsafe bool EqualsBase(ulong* x, ulong* y, int size)
+        {
+            while (size > 4)
+            {
+                if (*x != *y) return false;
+                x++;
+                y++;
+                size -= 4;
+            }
+            ulong mask = ulong.MaxValue >> ((4 - size) * (8 * 2));
+            if ((*x & mask) != (*y & mask)) return false;
+            return true;
+        }
+
+    }
+
     [MessagePackObject]
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public unsafe struct Unsafe16Array<T> where T : unmanaged
@@ -62,29 +111,6 @@ namespace MCTProcon31Protocol
             }
         }
 
-        public static Unsafe16Array<T1> Create<T1>(IReadOnlyList<T1> agents) where T1 : unmanaged {
-#if DEBUG
-            if ((uint)(agents.Count - 1) > 15) throw new ArgumentOutOfRangeException();
-#endif
-            Unsafe16Array<T1> result = new Unsafe16Array<T1>();
-            int i = 0;
-            for (; i < agents.Count; ++i)
-                result[i] = agents[i];
-            return result;
-        }
-
-        public static Unsafe16Array<T1> Create<T1>(params T1[] agents) where T1 : unmanaged
-        {
-#if DEBUG
-            if ((uint)(agents.Length - 1) > 15) throw new ArgumentOutOfRangeException();
-#endif
-            Unsafe16Array<T1> result = new Unsafe16Array<T1>();
-            int i = 0;
-            for (; i < agents.Length; ++i)
-                result[i] = agents[i];
-            return result;
-        }
-
         public ulong LongGetHashCode()
         {
             int count = sizeof(T);
@@ -99,26 +125,6 @@ namespace MCTProcon31Protocol
         {
             ulong r = this.LongGetHashCode();
             return unchecked((int)((uint)(r >> 32) ^ (uint)r));
-        }
-
-        public static unsafe bool Equals(Unsafe16Array<Point> x, Unsafe16Array<Point> y, int size)
-            => EqualsBase((ulong*)Unsafe.AsPointer(ref x), (ulong*)Unsafe.AsPointer(ref y), size);
-
-        public static unsafe bool Equals(Unsafe16Array<VelocityPoint> x, Unsafe16Array<VelocityPoint> y, int size)
-            => EqualsBase((ulong*)Unsafe.AsPointer(ref x), (ulong*)Unsafe.AsPointer(ref y), size);
-
-        public static unsafe bool EqualsBase(ulong* x, ulong* y, int size)
-        {
-            while (size > 4)
-            {
-                if (*x != *y) return false;
-                x++;
-                y++;
-                size -= 4;
-            }
-            ulong mask = ulong.MaxValue >> ((4-size) * (8 * 2));
-            if ((*x & mask) != (*y & mask)) return false;
-            return true;
         }
 
         public Unsafe16ArrayEnumerable<T> GetEnumerable(int Count) => new Unsafe16ArrayEnumerable<T>(this, Count);

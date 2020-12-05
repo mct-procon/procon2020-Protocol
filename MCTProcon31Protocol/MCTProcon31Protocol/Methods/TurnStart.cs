@@ -41,6 +41,12 @@ namespace MCTProcon31Protocol.Methods
         [Key(11)]
         public byte EnemyAgentsCount { get; set; }
 
+        [Key(12)]
+        public Unsafe16Array<AgentState> MyAgentsState {get;set;}
+
+        [Key(13)]
+        public Unsafe16Array<AgentState> EnemyAgentsState { get; set; }
+
         public TurnStart(byte turn, int waitMiliSecs, in Unsafe16Array<Point> myAgents, in Unsafe16Array<Point> enemyAgents, in ColoredBoardNormalSmaller myColoredBoard, in ColoredBoardNormalSmaller enemyColoredBoard, in Unsafe16Array<bool> isAgentsMoved, in ColoredBoardNormalSmaller mySurroundedBoard, in ColoredBoardNormalSmaller enemySurroundedBoard, byte myAgentsCount, byte enemyAgentsCount)
         {
             Turn = turn;
