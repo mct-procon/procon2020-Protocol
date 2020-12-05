@@ -223,7 +223,7 @@ namespace MCTProcon31Protocol.AIFramework
             SendDecided();
         }
 
-        protected virtual void DumpBoard(in ColoredBoardNormalSmaller MyBoard, in ColoredBoardNormalSmaller EnemyBoard, in ColoredBoardNormalSmaller MyPosisonBoard, in ColoredBoardNormalSmaller EnemyPosisonBoard, int AgentsCount, Unsafe16Array<Point> MyAgents, Unsafe16Array<Point> EnemyAgents )
+        protected virtual void DumpBoard(in ColoredBoardNormalSmaller MyPaintedBoard, in ColoredBoardNormalSmaller EnemyPaintedBoard, in ColoredBoardNormalSmaller MySurroundedBoard, in ColoredBoardNormalSmaller EnemySurroundedBoard, int AgentsCount, Unsafe16Array<Point> MyAgents, Unsafe16Array<Point> EnemyAgents )
         {
             if (!IsWriteBoard) return;
             lock (LogSyncRoot)
@@ -252,13 +252,13 @@ namespace MCTProcon31Protocol.AIFramework
                         }
                         if (!flag)
                         {
-                            if (MyBoard[x, y])
+                            if (MyPaintedBoard[x, y])
                                 Console.BackgroundColor = ConsoleColor.DarkRed;
-                            else if (EnemyBoard[x, y])
+                            else if (EnemyPaintedBoard[x, y])
                                 Console.BackgroundColor = ConsoleColor.DarkBlue;
-                            else if (MyPosisonBoard[x, y])
+                            else if (MySurroundedBoard[x, y])
                                 Console.BackgroundColor = ConsoleColor.Magenta;
-                            else if (EnemyPosisonBoard[x, y])
+                            else if (EnemySurroundedBoard[x, y])
                                 Console.BackgroundColor = ConsoleColor.Cyan;
                             else if (((x + y) & 1) == 0)
                                 Console.BackgroundColor = ConsoleColor.Black;
