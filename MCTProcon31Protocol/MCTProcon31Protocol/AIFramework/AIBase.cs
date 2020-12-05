@@ -126,6 +126,8 @@ namespace MCTProcon31Protocol.AIFramework
             EnemySurroundedBoard = turn.EnemySurroundedBoard;
             MyAgentsCount = turn.MyAgentsCount;
             EnemyAgentsCount = turn.EnemyAgentsCount;
+            MyAgentsState = turn.MyAgentsState;
+            EnemyAgentsState = turn.EnemyAgentsState;
             SendingFinished = false;
 
             Log("[IPC] Receive TurnStart turn = {0}", turn.Turn);
