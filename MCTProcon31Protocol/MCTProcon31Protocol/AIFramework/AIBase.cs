@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -115,7 +116,7 @@ namespace MCTProcon31Protocol.AIFramework
             EnemyBoard = turn.EnemyColoredBoard;
             MyAgents = turn.MyAgents;
             EnemyAgents = turn.EnemyAgents;
-            IsAgentsMoved = turn.IsAgentsMoved;
+            IsAgentsMoved = turn.Turn == 0 ? Unsafe16Array.Create(Enumerable.Range(0, 16).Select(x => true).ToArray()) : turn.IsAgentsMoved;
             CurrentTurn = turn.Turn;
             MySurroundedBoard = turn.MySurroundedBoard;
             EnemySurroundedBoard = turn.EnemySurroundedBoard;
@@ -124,7 +125,7 @@ namespace MCTProcon31Protocol.AIFramework
             SendingFinished = false;
 
             Log("[IPC] Receive TurnStart turn = {0}", turn.Turn);
-            DumpBoard(turn.MyColoredBoard, turn.EnemyColoredBoard, turn.MySurroundedBoard, turn.EnemySurroundedBoard, AgentsCount, MyAgents, EnemyAgents);
+            DumpBoard(turn.MyColoredBoard, turn.EnemyColoredBoard, turn.MySurroundedBoard, turn.EnemySurroundedBoard, AgentsCount, MyAgents, EnemyAgents, MyAgentsState, EnemyAgentsState);
 
             StartSolve();
             if (IsEnableTimer)
@@ -218,7 +219,7 @@ namespace MCTProcon31Protocol.AIFramework
             SendDecided();
         }
 
-        protected virtual void DumpBoard(in ColoredBoardNormalSmaller MyPaintedBoard, in ColoredBoardNormalSmaller EnemyPaintedBoard, in ColoredBoardNormalSmaller MySurroundedBoard, in ColoredBoardNormalSmaller EnemySurroundedBoard, int AgentsCount, Unsafe16Array<Point> MyAgents, Unsafe16Array<Point> EnemyAgents )
+        protected virtual void DumpBoard(in ColoredBoardNormalSmaller MyPaintedBoard, in ColoredBoardNormalSmaller EnemyPaintedBoard, in ColoredBoardNormalSmaller MySurroundedBoard, in ColoredBoardNormalSmaller EnemySurroundedBoard, int AgentsCount, Unsafe16Array<Point> MyAgents, Unsafe16Array<Point> EnemyAgents, Unsafe16Array<AgentState> MyAgentsState, Unsafe16Array<AgentState> EnemyAgentsState)
         {
             if (!IsWriteBoard) return;
             lock (LogSyncRoot)
@@ -228,41 +229,36 @@ namespace MCTProcon31Protocol.AIFramework
                     for (uint x = 0; x < ScoreBoard.GetLength(0); ++x)
                     {
                         int pack = Point.Pack((byte)x, (byte)y);
-                        bool flag = false;
                         Console.ForegroundColor = ConsoleColor.White;
                         for (int i = 0; i < AgentsCount; ++i)
                         {
-                            if(MyAgents[i].GetHashCode() == pack)
+                            if(MyAgentsState[i] != AgentState.NonPlaced && MyAgents[i].GetHashCode() == pack)
                             {
                                 Console.BackgroundColor = ConsoleColor.Red;
-                                flag = true;
-                                break;
+                                goto writeChr;
                             }
-                            if (EnemyAgents[i].GetHashCode() == pack)
+                            if (EnemyAgentsState[i] != AgentState.NonPlaced && EnemyAgents[i].GetHashCode() == pack)
                             {
                                 Console.BackgroundColor = ConsoleColor.Blue;
-                                flag = true;
-                                break;
+                                goto writeChr;
                             }
                         }
-                        if (!flag)
+                        if (MyPaintedBoard[x, y])
+                            Console.BackgroundColor = ConsoleColor.DarkRed;
+                        else if (EnemyPaintedBoard[x, y])
+                            Console.BackgroundColor = ConsoleColor.DarkBlue;
+                        else if (MySurroundedBoard[x, y])
+                            Console.BackgroundColor = ConsoleColor.Magenta;
+                        else if (EnemySurroundedBoard[x, y])
+                            Console.BackgroundColor = ConsoleColor.Cyan;
+                        else if (((x + y) & 1) == 0)
+                            Console.BackgroundColor = ConsoleColor.Black;
+                        else
                         {
-                            if (MyPaintedBoard[x, y])
-                                Console.BackgroundColor = ConsoleColor.DarkRed;
-                            else if (EnemyPaintedBoard[x, y])
-                                Console.BackgroundColor = ConsoleColor.DarkBlue;
-                            else if (MySurroundedBoard[x, y])
-                                Console.BackgroundColor = ConsoleColor.Magenta;
-                            else if (EnemySurroundedBoard[x, y])
-                                Console.BackgroundColor = ConsoleColor.Cyan;
-                            else if (((x + y) & 1) == 0)
-                                Console.BackgroundColor = ConsoleColor.Black;
-                            else
-                            {
-                                Console.ForegroundColor = ConsoleColor.Black;
-                                Console.BackgroundColor = ConsoleColor.White;
-                            }
+                            Console.ForegroundColor = ConsoleColor.Black;
+                            Console.BackgroundColor = ConsoleColor.White;
                         }
+                        writeChr:
                         string str = ScoreBoard[x, y].ToString();
                         if (str.Length != 3)
                             Console.Write(new string(' ', 3 - str.Length));
