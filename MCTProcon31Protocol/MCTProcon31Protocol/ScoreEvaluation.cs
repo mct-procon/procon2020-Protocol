@@ -61,7 +61,8 @@ namespace MCTProcon31Protocol
                 Span<Point> myStack = stackalloc Point[24 * 24];
 
                 Point point;
-                byte x, y, searchTo = 0, searchToX, searchToY, myStackSize = 0;
+                byte x, y, searchTo = 0, searchToX, searchToY;
+                int myStackSize = 0;
 
                 if (isFirst)
                 {
