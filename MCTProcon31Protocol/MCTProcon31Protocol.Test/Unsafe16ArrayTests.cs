@@ -105,5 +105,18 @@ namespace MCTProcon31Protocol.Test
             y[14] = new Point(4, 5);
             Assert.False(Unsafe16Array.Equals(x, y, 16));
         }
+
+        [Fact]
+        public void AlignmentCheck()
+        {
+            var ary = Enumerable.Range(0, 16).Select(i => ((byte)i, (byte)i + 1, (byte)i +2)).ToArray();
+            var a = Unsafe16Array.Create(ary);
+            for(int i = 0; i < 16; ++i)
+            {
+                Assert.True(a[i].Item1 == i);
+                Assert.True(a[i].Item2 == i+1);
+                Assert.True(a[i].Item3 == i+2);
+            }
+        }
     }
 }
