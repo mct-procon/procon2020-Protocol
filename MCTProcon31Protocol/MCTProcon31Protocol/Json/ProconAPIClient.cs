@@ -55,7 +55,8 @@ namespace MCTProcon31Protocol.Json
         public Task<APIResult<Matches.Matches>> Matches() => Get<Matches.Matches>("matches");
         public Task<APIResult<Matches.Match>> Match(int matchId) => Get<Matches.Match>("matches/" + matchId.ToString());
         public Task<APIResult<Matches.Match>> Match(Matches.MatchInformation matchId) => Match(matchId.Id);
-        public Task<APIResult<Matches.AgentActions>> SendAction(int matchId, Matches.AgentActions actions) => Post<Matches.AgentActions, Matches.AgentActions>("matches/" + matchId.ToString() + "/action", actions);
+        public Task<APIResult<Matches.AgentActions>> SendAction(int matchId, Matches.ActionRequests actions) => Post<Matches.ActionRequests, Matches.AgentActions>("matches/" + matchId.ToString() + "/action", actions);
+        public Task<APIResult<Matches.AgentActions>> SendAction(Matches.MatchInformation matchId, Matches.ActionRequests actions) => SendAction(matchId.Id, actions);
 
         public void Dispose()
         {
@@ -98,7 +99,7 @@ namespace MCTProcon31Protocol.Json
         }
 
         internal static async Task<APIResult<T>> ResponseToResult(HttpResponseMessage response) =>
-            (response.StatusCode == System.Net.HttpStatusCode.OK) ?
+            ((int)response.StatusCode >= 200 && (int)response.StatusCode < 300) ?
                 new APIResult<T>(JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync()))
             : (
                 (int)response.StatusCode == 425 && response.Headers.Contains("retry-after") ? 

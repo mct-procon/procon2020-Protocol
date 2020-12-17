@@ -6,7 +6,7 @@ using System.Text;
 namespace MCTProcon31Protocol.Json.Matches
 {
     [JsonObject]
-    public class AgentAction
+    public class ActionRequest
     {
         [JsonProperty("x")]
         public int X { get; set; }
@@ -18,7 +18,8 @@ namespace MCTProcon31Protocol.Json.Matches
         public string _actionType { get; set; }
 
         [JsonIgnore]
-        public ActionType ActionType => _actionType switch {
+        public ActionType ActionType => _actionType switch
+        {
             "put" => ActionType.Put,
             "stay" => ActionType.Stay,
             "move" => ActionType.Move,
@@ -26,33 +27,23 @@ namespace MCTProcon31Protocol.Json.Matches
             _ => ActionType.Unknown
         };
 
-        [JsonProperty("turn")]
-        public int Turn { get; set; }
-
         [JsonProperty("agentID")]
         public int AgentId { get; set; }
 
-        [JsonProperty("apply")]
-        public sbyte? _apply { get; set; }
-
-        [JsonIgnore]
-        public Appliment Apply => _apply.HasValue ? (Appliment)_apply : Appliment.None;
-    }
-
-    public enum ActionType : byte
-    {
-        Unknown = 0,
-        Put,
-        Stay,
-        Move,
-        Remove
-    }
-
-    public enum Appliment : sbyte
-    {
-        Invalid = -1,
-        Race = 0,
-        Success = 1,
-        None = 2
+        public ActionRequest() { }
+        public ActionRequest(int x, int y, ActionType at, int id)
+        {
+            X = x;
+            Y = y;
+            _actionType = at switch
+            {
+                ActionType.Put => "put",
+                ActionType.Stay => "stay",
+                ActionType.Move => "move",
+                ActionType.Remove => "remove",
+                _ => "move"
+            };
+            AgentId = id;
+        }
     }
 }
