@@ -46,13 +46,11 @@ namespace MCTProcon31Protocol
 
         public async Task Connect(int port, string hostname = "localhost")
         {
-            var ipAddress = Dns.GetHostEntry("localhost").AddressList[0];
-
             if (isClient)
                 _port = port;
             else
             {
-                listener = new TcpListener(ipAddress, port);
+                listener = new TcpListener(IPAddress.Loopback, port);
                 listener.Start();
             }
             Canceller = new CancellationTokenSource();
