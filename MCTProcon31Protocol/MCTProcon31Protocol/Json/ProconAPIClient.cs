@@ -42,7 +42,7 @@ namespace MCTProcon31Protocol.Json
 
         private async Task<APIResult<V>> Post<T, V>(string location, T content) where V : class
         {
-            using (var httpContent = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8)) {
+            using (var httpContent = new StringContent(JsonConvert.SerializeObject(content), Encoding.UTF8, "application/json")) {
                 var response = await hc.PostAsync(endPoint + location, httpContent);
                 return await APIResult<V>.ResponseToResult(response);
             }
