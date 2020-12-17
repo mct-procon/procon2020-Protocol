@@ -44,7 +44,7 @@ namespace MCTProcon31Protocol
             await ServerMainAction();
         }
 
-        public async Task Connect(int port)
+        public async Task Connect(int port, string hostname = "localhost")
         {
             var ipAddress = Dns.GetHostEntry("localhost").AddressList[0];
 
@@ -63,7 +63,7 @@ namespace MCTProcon31Protocol
                     return;
                 try
                 {
-                    client = isClient ? new TcpClient("localhost", _port) : listener.AcceptTcpClient();
+                    client = isClient ? new TcpClient(hostname, _port) : listener.AcceptTcpClient();
                 }
                 catch (SocketException ex)
                 {
@@ -72,6 +72,8 @@ namespace MCTProcon31Protocol
                         await Task.Delay(200, Canceller.Token);
                         goto begin;
                     }
+                    else
+                        System.Diagnostics.Debug.WriteLine(ex);
                     return;
                 }
                 stream = client.GetStream();

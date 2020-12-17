@@ -75,19 +75,19 @@ namespace MCTProcon31Protocol.AIFramework
             EndSolve();
         }
 
-        public virtual void StartSync(int port, bool isWriteLog = false, bool isWriteBoard = false)
+        public virtual void StartSync(int port, string hostname = "localhost", bool isWriteLog = false, bool isWriteBoard = false)
         {
 #pragma warning disable CS4014
-            Start(port, isWriteLog, isWriteBoard);
+            Start(port, hostname, isWriteLog, isWriteBoard);
 #pragma warning restore CS4014
             SynchronizeStopper.Wait();
         }
-        public virtual async Task Start(int port, bool isWriteLog = false, bool isWriteBoard = false, bool isAutoSend = true)
+        public virtual async Task Start(int port, string hostname = "localhost", bool isWriteLog = false, bool isWriteBoard = false, bool isAutoSend = true)
         {
             SynchronizeStopper.Reset();
             IsWriteLog = isWriteLog;
             IsWriteBoard = isWriteBoard;
-            await ipc.Connect(port);
+            await ipc.Connect(port, hostname);
             var proc = System.Diagnostics.Process.GetCurrentProcess();
             ipc.Write(DataKind.Connect, new Connect(ProgramKind.AI) { ProcessId = proc.Id });
             proc.Dispose();
