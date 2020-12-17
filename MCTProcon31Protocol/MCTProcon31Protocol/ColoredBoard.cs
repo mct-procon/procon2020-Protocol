@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using System.Text;
 using MessagePack;
+using System.Runtime.Intrinsics.X86;
 
 namespace MCTProcon31Protocol
 {
@@ -180,13 +181,52 @@ namespace MCTProcon31Protocol
             set => this[p.X, p.Y] = value;
         }
 
-        public void Invert()
+        public void Invert(int height = BoardSize)
         {
             fixed(uint * ptr = board)
             {
-                for (int i = 0; i < BoardSize; ++i)
+                for (int i = 0; i < height; ++i)
                     board[i] = board[i] ^ uint.MaxValue;
             }
+        }
+
+        public void Or(in ColoredBoardNormalSmaller other, int height = BoardSize)
+        {
+            fixed (uint* me = this.board) fixed (uint* ot = other.board)
+                for (int i = 0; i < height; ++i)
+                    me[i] |= ot[i];
+        }
+
+        public void And(in ColoredBoardNormalSmaller other, int height = BoardSize)
+        {
+            fixed (uint* me = this.board) fixed (uint* ot = other.board)
+                for (int i = 0; i < height; ++i)
+                    me[i] &= ot[i];
+        }
+
+        public void Xor(in ColoredBoardNormalSmaller other, int height = BoardSize)
+        {
+            fixed (uint* me = this.board) fixed (uint* ot = other.board)
+                for (int i = 0; i < height; ++i)
+                    me[i] ^= ot[i];
+        }
+
+        public int PopCount(int height = BoardSize)
+        {
+            int popcounts = 0;
+            fixed (uint* me = this.board)
+            {
+                for (int i = 0; i < height; ++i)
+                    popcounts += BitOperations.PopCount(me[i]);
+            }
+            return popcounts;
+        }
+
+        public void Clear(int height = BoardSize)
+        {
+            fixed (uint* me = this.board) 
+                for (int i = 0; i < height; ++i)
+                    me[i] = 0;
         }
 
         public override string ToString()
