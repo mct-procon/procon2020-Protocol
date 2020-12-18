@@ -34,6 +34,7 @@ namespace MCTProcon31Protocol
 
         int _port = 0;
         bool isClient;
+        bool isRecognizeProcessExit;
 
         public event Action<Exception> OnExceptionThrown;
 
@@ -44,13 +45,14 @@ namespace MCTProcon31Protocol
             await ServerMainAction();
         }
 
-        public async Task Connect(int port, string hostname = "localhost")
+        public async Task Connect(int port, bool isRecognizeProcessExit, string hostname = "localhost")
         {
+            this.isRecognizeProcessExit = isRecognizeProcessExit;
             if (isClient)
                 _port = port;
             else
             {
-                listener = new TcpListener(IPAddress.Loopback, port);
+                listener = new TcpListener(IPAddress.Any, port);
                 listener.Start();
             }
             Canceller = new CancellationTokenSource();
@@ -74,7 +76,7 @@ namespace MCTProcon31Protocol
                         System.Diagnostics.Debug.WriteLine(ex);
                     return;
                 }
-                stream = client.GetStream();
+                    stream = client.GetStream();
             }, Canceller.Token);
         }
 
@@ -98,7 +100,6 @@ namespace MCTProcon31Protocol
             {
                 await Task.Delay(200);
             }
-            client.ReceiveTimeout = Timeout.Infinite;
 
             int bufferSize = 0;
             int messageSize = 0;
@@ -125,7 +126,7 @@ namespace MCTProcon31Protocol
                             goto data_kind_read_start;
                         }
                     }
-                    data_kind_read_start:
+                data_kind_read_start:
                     while (true)
                     {
                         bufferSize = await stream.ReadAsync(headBuffer, 0, 4, cancelToken);
@@ -137,7 +138,7 @@ namespace MCTProcon31Protocol
                             goto message_read_start;
                         }
                     }
-                    message_read_start:
+                message_read_start:
 
                     byte[] currentBuffer = messageBuffer.Length < messageSize ? new byte[messageSize] : messageBuffer;
                     while (current < messageSize)
@@ -185,9 +186,12 @@ namespace MCTProcon31Protocol
                         {
                             case Methods.DataKind.Connect:
                                 var Data = MessagePackSerializer.Deserialize<Methods.Connect>(currentBuffer);
-                                AIProcess = Process.GetProcessById(Data.ProcessId);
-                                AIProcess.EnableRaisingEvents = true;
-                                AIProcess.Exited += __onAIProcessExited;
+                                if (isRecognizeProcessExit)
+                                {
+                                    AIProcess = Process.GetProcessById(Data.ProcessId);
+                                    AIProcess.EnableRaisingEvents = true;
+                                    AIProcess.Exited += __onAIProcessExited;
+                                }
                                 serverReader.OnConnect(Data);
                                 break;
                             case Methods.DataKind.Decided:
