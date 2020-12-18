@@ -87,7 +87,7 @@ namespace MCTProcon31Protocol.AIFramework
             SynchronizeStopper.Reset();
             IsWriteLog = isWriteLog;
             IsWriteBoard = isWriteBoard;
-            await ipc.Connect(port, hostname);
+            await ipc.Connect(port, false, hostname);
             var proc = System.Diagnostics.Process.GetCurrentProcess();
             ipc.Write(DataKind.Connect, new Connect(ProgramKind.AI) { ProcessId = proc.Id });
             proc.Dispose();
